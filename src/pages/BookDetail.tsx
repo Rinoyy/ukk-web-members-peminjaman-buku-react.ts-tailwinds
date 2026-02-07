@@ -1,0 +1,219 @@
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getBookById } from '../services/book.service';
+import { borrowBook, checkEligibility } from '../services/borrow.service';
+import { useAuth } from '../hooks/useAuth';
+import type { Book } from '../types';
+import { BookOpen, AlertTriangle } from 'lucide-react';
+
+const BookDetail = () => {
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const { user } = useAuth();
+    const [book, setBook] = useState<Book | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [eligibility, setEligibility] = useState<{ canBorrow: boolean, reason: string | null } | null>(null);
+
+    useEffect(() => {
+        const fetchBook = async () => {
+            if (!id) return;
+            try {
+                setLoading(true);
+                const data = await getBookById(Number(id));
+                setBook(data);
+
+                if (user) {
+                    const eligibilityData = await checkEligibility();
+                    setEligibility(eligibilityData);
+                }
+            } catch (err) {
+                console.error('Failed to load book:', err);
+                setError('Buku tidak ditemukan');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchBook();
+    }, [id, user]);
+
+    const handleBorrow = async () => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+
+        if (eligibility && !eligibility.canBorrow) {
+            alert(eligibility.reason);
+            return;
+        }
+
+        if (!book) return;
+
+        if (window.confirm(`Apakah Anda yakin ingin meminjam buku "${book.title}"?`)) {
+            try {
+                await borrowBook(book.id);
+                alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
+                navigate('/history');
+            } catch (err: any) {
+                alert(err.response?.data?.message || 'Gagal meminjam buku');
+            }
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <p className="text-gray-500">Memuat detail buku...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !book) {
+        return (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="text-center">
+                    <span className="text-6xl mb-4 block">📭</span>
+                    <p className="text-gray-500 mb-4">{error || 'Buku tidak ditemukan'}</p>
+                    <button
+                        onClick={() => navigate('/books')}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        Kembali ke Daftar Buku
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-4xl mx-auto">
+            {/* Back Button */}
+            <button
+                onClick={() => navigate('/books')}
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6 transition-colors"
+            >
+                <span>←</span>
+                <span>Kembali ke Daftar Buku</span>
+            </button>
+
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                {/* Header with Gradient */}
+                <div className="h-48 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center relative">
+                    <span className="text-8xl">📖</span>
+                    {book.qrCode && (
+                        <img
+                            src={book.qrCode}
+                            alt="QR Code"
+                            className="absolute bottom-4 right-4 w-16 h-16 rounded-lg shadow-lg bg-white p-1"
+                        />
+                    )}
+                </div>
+
+                {/* Content */}
+                <div className="p-8">
+                    {/* Title & Category */}
+                    <div className="mb-6">
+                        <div className="flex items-center gap-3 mb-3">
+                            <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full font-medium uppercase tracking-wider">
+                                {book.category?.name || 'Umum'}
+                            </span>
+                            <span className={`text-xs px-3 py-1 rounded-full font-medium ${book.stock > 0
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-red-100 text-red-700'
+                                }`}>
+                                {book.stock > 0 ? `${book.stock} Tersedia` : 'Stok Habis'}
+                            </span>
+                        </div>
+                        <h1 className="text-3xl font-bold text-gray-800 mb-2">{book.title}</h1>
+                        <p className="text-lg text-gray-600">✍️ {book.author}</p>
+                    </div>
+
+                    {/* Synopsis */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                            <span>📝</span>
+                            <span>Sinopsis</span>
+                        </h2>
+                        <div className="bg-gray-50 rounded-xl p-6">
+                            {book.description ? (
+                                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                    {book.description}
+                                </p>
+                            ) : (
+                                <p className="italic text-gray-400 text-center py-8">
+                                    Belum ada sinopsis untuk buku ini.
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Book Info Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div className="bg-gray-50 rounded-xl p-4 text-center">
+                            <span className="text-2xl mb-2 block">📚</span>
+                            <span className="text-xs text-gray-400 uppercase font-semibold block">Kategori</span>
+                            <span className="text-sm font-medium text-gray-700">{book.category?.name || 'Umum'}</span>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-4 text-center">
+                            <span className="text-2xl mb-2 block">✍️</span>
+                            <span className="text-xs text-gray-400 uppercase font-semibold block">Penulis</span>
+                            <span className="text-sm font-medium text-gray-700">{book.author}</span>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-4 text-center">
+                            <span className="text-2xl mb-2 block">📦</span>
+                            <span className="text-xs text-gray-400 uppercase font-semibold block">Stok</span>
+                            <span className={`text-sm font-bold ${book.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {book.stock} Tersedia
+                            </span>
+                        </div>
+                        <div className="bg-gray-50 rounded-xl p-4 text-center">
+                            <span className="text-2xl mb-2 block">🆔</span>
+                            <span className="text-xs text-gray-400 uppercase font-semibold block">ID Buku</span>
+                            <span className="text-sm font-medium text-gray-700">#{book.id}</span>
+                        </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-4 pt-6 border-t">
+                        <button
+                            onClick={() => navigate('/books')}
+                            className="w-full py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl transition-colors border border-gray-200"
+                        >
+                            ← Kembali
+                        </button>
+
+                        <button
+                            onClick={handleBorrow}
+                            disabled={book.stock < 1 || (eligibility !== null && !eligibility.canBorrow)}
+                            className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transform transition-all active:scale-95 flex items-center justify-center gap-2
+                                ${book.stock > 0 && (!eligibility || eligibility.canBorrow)
+                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-500/30'
+                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                        >
+                            <BookOpen className="w-6 h-6" />
+                            {book.stock < 1 ? 'Stok Habis' :
+                                eligibility && !eligibility.canBorrow ? 'Tidak Dapat Meminjam' :
+                                    'Pinjam Buku Sekarang'}
+                        </button>
+
+                        {eligibility && !eligibility.canBorrow && (
+                            <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
+                                <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                                <div>
+                                    <p className="font-semibold text-red-800 text-sm">Peminjaman Dibatasi</p>
+                                    <p className="text-sm text-red-600 mt-1">{eligibility.reason}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default BookDetail;
