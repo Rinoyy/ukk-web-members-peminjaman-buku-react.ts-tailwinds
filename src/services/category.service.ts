@@ -1,4 +1,4 @@
-import { API_URL, getHeaders, handleResponse } from './api';
+import { API_URL, forceLogout } from './api';
 
 export interface Category {
     id: number;
@@ -8,10 +8,25 @@ export interface Category {
 
 class CategoryService {
     async getCategories(): Promise<Category[]> {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/categories`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal mengambil data kategori');
+        }
+
+        return response.json();
     }
 }
 

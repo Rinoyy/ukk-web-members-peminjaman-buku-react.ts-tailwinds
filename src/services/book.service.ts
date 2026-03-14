@@ -1,4 +1,4 @@
-import { API_URL, getHeaders, handleResponse } from './api';
+import { API_URL, forceLogout } from './api';
 import type { Book } from '../types';
 
 class BookService {
@@ -8,10 +8,24 @@ class BookService {
         if (params?.category) query.set('category', params.category);
         const qs = query.toString();
 
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/books${qs ? `?${qs}` : ''}`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal mengambil data buku');
+        }
+
+        return response.json();
     }
 
     async getBookById(id: number): Promise<Book> {
@@ -19,10 +33,24 @@ class BookService {
             throw new Error('ID buku tidak valid');
         }
 
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/books/${id}`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal mengambil detail buku');
+        }
+
+        return response.json();
     }
 }
 

@@ -1,26 +1,71 @@
-import { API_URL, getHeaders, handleResponse } from './api';
+import { API_URL, forceLogout } from './api';
 import type { Borrowing, EligibilityResponse } from '../types';
 
 class BorrowService {
     async getBorrowings(): Promise<Borrowing[]> {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/borrow`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal mengambil data peminjaman');
+        }
+
+        return response.json();
     }
 
     async getMyFines(): Promise<Borrowing[]> {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/borrow/my-fines`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal mengambil data denda');
+        }
+
+        return response.json();
     }
 
     async checkEligibility(): Promise<EligibilityResponse> {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/borrow/check-eligibility`, {
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal cek kelayakan');
+        }
+
+        return response.json();
     }
 
     async borrowBook(bookId: number): Promise<Borrowing> {
@@ -28,12 +73,25 @@ class BorrowService {
             throw new Error('ID buku tidak valid');
         }
 
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/borrow`, {
             method: 'POST',
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
             body: JSON.stringify({ bookId }),
         });
-        return handleResponse(response);
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal meminjam buku');
+        }
+
+        return response.json();
     }
 
     async returnBookRequest(borrowingId: number): Promise<Borrowing> {
@@ -41,11 +99,25 @@ class BorrowService {
             throw new Error('ID peminjaman tidak valid');
         }
 
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/borrow/${borrowingId}/return`, {
             method: 'POST',
-            headers: getHeaders(),
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
         });
-        return handleResponse(response);
+        if (response.status === 401) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal request pengembalian');
+        }
+
+        return response.json();
     }
 }
 
