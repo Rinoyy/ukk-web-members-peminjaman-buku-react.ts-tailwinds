@@ -24,6 +24,10 @@ class BorrowService {
     }
 
     async borrowBook(bookId: number): Promise<Borrowing> {
+        if (!bookId || bookId <= 0) {
+            throw new Error('ID buku tidak valid');
+        }
+
         const response = await fetch(`${API_URL}/borrow`, {
             method: 'POST',
             headers: getHeaders(),
@@ -33,6 +37,10 @@ class BorrowService {
     }
 
     async returnBookRequest(borrowingId: number): Promise<Borrowing> {
+        if (!borrowingId || borrowingId <= 0) {
+            throw new Error('ID peminjaman tidak valid');
+        }
+
         const response = await fetch(`${API_URL}/borrow/${borrowingId}/return`, {
             method: 'POST',
             headers: getHeaders(),

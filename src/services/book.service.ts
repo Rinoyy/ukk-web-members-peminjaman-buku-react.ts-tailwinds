@@ -15,6 +15,10 @@ class BookService {
     }
 
     async getBookById(id: number): Promise<Book> {
+        if (!id || id <= 0) {
+            throw new Error('ID buku tidak valid');
+        }
+
         const response = await fetch(`${API_URL}/books/${id}`, {
             headers: getHeaders(),
         });
