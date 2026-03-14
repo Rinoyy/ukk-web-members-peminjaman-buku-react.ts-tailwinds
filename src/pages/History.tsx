@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useBorrow } from '../hooks/useBorrow';
-import { AlertCircle, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { AlertCircle, X } from 'lucide-react';
 
 const History = () => {
-    const { borrowings, loading, fetchBorrowings, requestReturn, userFines, fetchMyFines } = useBorrow();
+    const { borrowings, loading, fetchBorrowings, requestReturn, cancelBorrow, userFines, fetchMyFines } = useBorrow();
+    const [cancelModal, setCancelModal] = useState<number | null>(null);
+    const [cancelLoading, setCancelLoading] = useState(false);
 
     useEffect(() => {
         fetchBorrowings();
-        fetchMyFines(); 
+        fetchMyFines();
     }, []);
 
     const handleReturn = async (borrowingId: number) => {
@@ -20,6 +22,17 @@ const History = () => {
         }
     };
 
+    const handleCancel = async () => {
+        if (!cancelModal) return;
+        setCancelLoading(true);
+        const success = await cancelBorrow(cancelModal);
+        setCancelLoading(false);
+        if (success) {
+            setCancelModal(null);
+            fetchBorrowings();
+        }
+    };
+
     const getStatusBadge = (status: string) => {
         const styles: Record<string, string> = {
             PENDING: 'bg-yellow-100 text-yellow-700',
@@ -27,6 +40,7 @@ const History = () => {
             RETURN_PENDING: 'bg-orange-100 text-orange-700',
             RETURNED: 'bg-green-100 text-green-700',
             REJECTED: 'bg-red-100 text-red-700',
+            CANCELLED: 'bg-gray-100 text-gray-600',
         };
         const labels: Record<string, string> = {
             PENDING: '⏳ Menunggu Persetujuan',
@@ -34,6 +48,7 @@ const History = () => {
             RETURN_PENDING: '🔄 Menunggu Verifikasi',
             RETURNED: '✓ Selesai',
             REJECTED: '✕ Ditolak',
+            CANCELLED: '🚫 Dibatalkan',
         };
         return (
             <span className={`px-3 py-1 rounded-full text-xs font-bold ${styles[status] || 'bg-gray-100 text-gray-600'}`}>
@@ -50,7 +65,7 @@ const History = () => {
 
             {/* Fines Alert */}
             {userFines.length > 0 && (
-                <div className="mb-8 p-6 bg-red-50 border border-red-100 rounded-2xl animate-in fade-in slide-in-from-top-4">
+                <div className="mb-8 p-6 bg-red-50 border border-red-100 rounded-2xl">
                     <div className="flex items-start gap-4">
                         <div className="p-3 bg-red-100 rounded-full">
                             <AlertCircle className="w-6 h-6 text-red-600" />
@@ -146,6 +161,13 @@ const History = () => {
                                         </div>
                                     </div>
 
+                                    {/* Reject Reason */}
+                                    {b.status === 'REJECTED' && b.rejectReason && (
+                                        <div className="mb-3 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-700">
+                                            <span className="font-semibold">Alasan penolakan:</span> {b.rejectReason}
+                                        </div>
+                                    )}
+
                                     {/* Footer Actions/Info */}
                                     <div className="flex justify-between items-center border-t border-gray-100 pt-4 mt-2">
                                         <div className="flex items-center gap-2">
@@ -159,19 +181,61 @@ const History = () => {
                                             )}
                                         </div>
 
-                                        {b.status === 'BORROWED' && (
-                                            <button
-                                                onClick={() => handleReturn(b.id)}
-                                                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-xl hover:shadow-lg shadow-orange-200 transition-all active:scale-95"
-                                            >
-                                                Kembalikan Buku
-                                            </button>
-                                        )}
+                                        <div className="flex items-center gap-2">
+                                            {b.status === 'PENDING' && (
+                                                <button
+                                                    onClick={() => setCancelModal(b.id)}
+                                                    className="px-4 py-2 text-red-600 border border-red-200 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors"
+                                                >
+                                                    Batalkan
+                                                </button>
+                                            )}
+                                            {b.status === 'BORROWED' && (
+                                                <button
+                                                    onClick={() => handleReturn(b.id)}
+                                                    className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-xl hover:shadow-lg shadow-orange-200 transition-all active:scale-95"
+                                                >
+                                                    Kembalikan Buku
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Cancel Confirmation Modal */}
+            {cancelModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-bold text-gray-900">Batalkan Peminjaman?</h3>
+                            <button onClick={() => setCancelModal(null)} className="p-1 hover:bg-gray-100 rounded-lg">
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+                        <p className="text-gray-600 mb-6">
+                            Apakah Anda yakin ingin membatalkan peminjaman ini? Buku akan dikembalikan ke stok tersedia.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setCancelModal(null)}
+                                className="flex-1 py-2.5 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+                            >
+                                Kembali
+                            </button>
+                            <button
+                                onClick={handleCancel}
+                                disabled={cancelLoading}
+                                className="flex-1 py-2.5 px-4 text-white bg-red-600 rounded-xl hover:bg-red-700 font-medium transition-colors disabled:opacity-50"
+                            >
+                                {cancelLoading ? 'Loading...' : 'Ya, Batalkan'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

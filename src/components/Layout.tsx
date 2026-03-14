@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import NotificationBell from './NotificationBell';
 
 interface LayoutProps {
     children: ReactNode;
@@ -26,8 +27,9 @@ const Layout = ({ children }: LayoutProps) => {
                         <span className="text-2xl">📖</span>
                         <h1 className="text-xl font-bold">Perpustakaan</h1>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <span className="text-sm opacity-90">Halo, {user?.username}!</span>
+                    <div className="flex items-center gap-3">
+                        <NotificationBell />
+                        <span className="text-sm opacity-90 hidden sm:inline">Halo, {user?.username}!</span>
                         <button
                             onClick={logout}
                             className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"

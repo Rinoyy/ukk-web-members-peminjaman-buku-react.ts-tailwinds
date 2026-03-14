@@ -4,7 +4,9 @@ import { bookService } from '../services/book.service';
 import { borrowService } from '../services/borrow.service';
 import { useAuth } from '../hooks/useAuth';
 import type { Book } from '../types';
-import { BookOpen, AlertTriangle } from 'lucide-react';
+import { BookOpen, AlertTriangle, X } from 'lucide-react';
+
+const API_BASE = 'http://localhost:3000';
 
 const BookDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -14,6 +16,8 @@ const BookDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [eligibility, setEligibility] = useState<{ canBorrow: boolean, reason: string | null } | null>(null);
+    const [showBorrowModal, setShowBorrowModal] = useState(false);
+    const [borrowLoading, setBorrowLoading] = useState(false);
 
     useEffect(() => {
         const fetchBook = async () => {
@@ -49,15 +53,21 @@ const BookDetail = () => {
         }
 
         if (!book) return;
+        setShowBorrowModal(true);
+    };
 
-        if (window.confirm(`Apakah Anda yakin ingin meminjam buku "${book.title}"?`)) {
-            try {
-                await borrowService.borrowBook(book.id);
-                alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
-                navigate('/history');
-            } catch (err: any) {
-                alert(err.response?.data?.message || 'Gagal meminjam buku');
-            }
+    const confirmBorrow = async () => {
+        if (!book) return;
+        setBorrowLoading(true);
+        try {
+            await borrowService.borrowBook(book.id);
+            setShowBorrowModal(false);
+            alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
+            navigate('/history');
+        } catch (err: any) {
+            alert(err.response?.data?.message || err.message || 'Gagal meminjam buku');
+        } finally {
+            setBorrowLoading(false);
         }
     };
 
@@ -101,15 +111,18 @@ const BookDetail = () => {
             </button>
 
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                {/* Header with Gradient */}
-                <div className="h-48 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center relative">
-                    <span className="text-8xl">📖</span>
-                    {book.qrCode && (
+                {/* Header with Cover Image */}
+                <div className="h-64 relative overflow-hidden">
+                    {book.image ? (
                         <img
-                            src={book.qrCode}
-                            alt="QR Code"
-                            className="absolute bottom-4 right-4 w-16 h-16 rounded-lg shadow-lg bg-white p-1"
+                            src={`${API_BASE}${book.image}`}
+                            alt={book.title}
+                            className="w-full h-full object-cover"
                         />
+                    ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center">
+                            <span className="text-8xl">📖</span>
+                        </div>
                     )}
                 </div>
 
@@ -212,6 +225,65 @@ const BookDetail = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Borrow Confirmation Modal */}
+            {showBorrowModal && book && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl overflow-hidden">
+                        {/* Modal Header with Book Image */}
+                        <div className="h-32 relative overflow-hidden">
+                            {book.image ? (
+                                <img
+                                    src={`${API_BASE}${book.image}`}
+                                    alt={book.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <span className="text-5xl">📖</span>
+                                </div>
+                            )}
+                            <button
+                                onClick={() => setShowBorrowModal(false)}
+                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 transition-colors"
+                            >
+                                <X className="w-4 h-4 text-white" />
+                            </button>
+                        </div>
+
+                        <div className="p-6">
+                            <div className="text-center mb-6">
+                                <h3 className="text-lg font-bold text-gray-900 mb-1">Pinjam Buku Ini?</h3>
+                                <p className="text-gray-600 font-medium">{book.title}</p>
+                                <p className="text-sm text-gray-400">oleh {book.author}</p>
+                            </div>
+
+                            <div className="bg-blue-50 rounded-xl p-3 mb-6">
+                                <p className="text-sm text-blue-700 text-center">
+                                    📋 Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setShowBorrowModal(false)}
+                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    onClick={confirmBorrow}
+                                    disabled={borrowLoading}
+                                    className="flex-1 py-3 px-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    <BookOpen className="w-4 h-4" />
+                                    {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

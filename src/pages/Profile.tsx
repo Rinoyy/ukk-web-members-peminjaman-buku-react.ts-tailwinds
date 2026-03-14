@@ -6,21 +6,21 @@ const Profile = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-6">
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 max-w-md w-full border border-white/20 shadow-2xl">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+            <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 p-8 max-w-md w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-5xl shadow-lg mb-4">
+                    <div className="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-5xl mb-4">
                         👤
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-2">{user.username}</h1>
-                    <span className="inline-block px-4 py-1 bg-green-500/20 border border-green-400 text-green-300 rounded-full text-sm font-medium">
+                    <h1 className="text-2xl font-bold text-gray-800 mb-2">{user.username}</h1>
+                    <span className="inline-block px-4 py-1.5 bg-green-50 border border-green-200 text-green-700 rounded-full text-sm font-medium">
                         ✓ Member Aktif
                     </span>
                 </div>
 
                 {/* QR Code */}
-                <div className="bg-white rounded-2xl p-6 shadow-xl mb-6">
+                <div className="bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-100">
                     <p className="text-center text-gray-600 text-sm font-medium mb-4">
                         📱 Scan untuk Check-in Perpustakaan
                     </p>
@@ -35,16 +35,16 @@ const Profile = () => {
                             QR Not Available
                         </div>
                     )}
-                    <p className="text-center text-gray-500 text-xs mt-4">
+                    <p className="text-center text-gray-400 text-xs mt-4">
                         ID: {user.id} • {user.role}
                     </p>
                 </div>
 
                 {/* Member Info */}
-                <div className="bg-white/5 backdrop-blur rounded-xl p-4 border border-white/10">
-                    <div className="flex items-center justify-between text-white/80 text-sm">
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                    <div className="flex items-center justify-between text-gray-600 text-sm">
                         <span>Member sejak</span>
-                        <span className="font-medium">
+                        <span className="font-medium text-gray-800">
                             {new Date(user.createdAt).toLocaleDateString('id-ID', {
                                 year: 'numeric',
                                 month: 'long',
@@ -55,7 +55,7 @@ const Profile = () => {
                 </div>
 
                 {/* Instruction */}
-                <p className="text-center text-white/60 text-sm mt-6">
+                <p className="text-center text-gray-400 text-sm mt-6">
                     Tunjukkan QR Code ini ke petugas saat berkunjung ke perpustakaan
                 </p>
             </div>

@@ -15,6 +15,7 @@ export interface Book {
         name: string;
     };
     description?: string;
+    image?: string;
     stock: number;
     qrCode?: string;
     createdAt: string;
@@ -25,11 +26,12 @@ export interface Borrowing {
     id: number;
     userId: number;
     bookId: number; // For backward compatibility if needed, but should use bookCopyId
-    status: 'PENDING' | 'BORROWED' | 'RETURN_PENDING' | 'RETURNED' | 'REJECTED';
+    status: 'PENDING' | 'BORROWED' | 'RETURN_PENDING' | 'RETURNED' | 'REJECTED' | 'CANCELLED';
     borrowDate: string;
     dueDate?: string;
     actualReturnDate?: string;
     condition?: 'GOOD' | 'DAMAGED' | 'LOST';
+    rejectReason?: string;
     lateFee: number;
     damageFee: number;
     totalFine: number;

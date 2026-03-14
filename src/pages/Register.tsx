@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { UserPlus } from 'lucide-react';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -32,16 +33,18 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-500 via-teal-500 to-blue-600 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-8 w-full max-w-md">
                 <div className="text-center mb-8">
-                    <span className="text-5xl mb-4 block">📝</span>
+                    <div className="w-16 h-16 mx-auto bg-green-50 rounded-2xl flex items-center justify-center mb-4">
+                        <UserPlus className="w-8 h-8 text-green-600" />
+                    </div>
                     <h1 className="text-2xl font-bold text-gray-800">Daftar Member</h1>
-                    <p className="text-gray-500 mt-1">Buat akun untuk meminjam buku</p>
+                    <p className="text-gray-500 mt-1 text-sm">Buat akun untuk meminjam buku</p>
                 </div>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-lg text-sm">
+                    <div className="mb-4 p-3 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm text-center">
                         {error}
                     </div>
                 )}
@@ -53,7 +56,7 @@ const Register = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                             placeholder="Pilih username"
                             required
                         />
@@ -64,7 +67,7 @@ const Register = () => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                             placeholder="Buat password"
                             required
                         />
@@ -75,7 +78,7 @@ const Register = () => {
                             type="password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                             placeholder="Ulangi password"
                             required
                         />
@@ -83,8 +86,9 @@ const Register = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50"
+                        className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
                     >
+                        <UserPlus className="w-4 h-4" />
                         {loading ? 'Loading...' : 'Daftar Sekarang'}
                     </button>
                 </form>

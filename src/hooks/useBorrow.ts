@@ -37,7 +37,19 @@ export const useBorrow = () => {
             fetchBorrowings();
             return true;
         } catch (err: any) {
-            const message = err.response?.data?.message || 'Failed to request borrow';
+            const message = err.message || 'Gagal meminjam buku';
+            alert(message);
+            return false;
+        }
+    };
+
+    const cancelBorrow = async (borrowingId: number) => {
+        try {
+            await borrowService.cancelBorrow(borrowingId);
+            fetchBorrowings();
+            return true;
+        } catch (err: any) {
+            const message = err.message || 'Gagal membatalkan peminjaman';
             alert(message);
             return false;
         }
@@ -63,6 +75,8 @@ export const useBorrow = () => {
         fetchBorrowings,
         fetchMyFines,
         requestBorrow,
+        cancelBorrow,
         requestReturn
     };
 };
+

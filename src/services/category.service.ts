@@ -1,4 +1,4 @@
-import { API_URL, forceLogout } from './api';
+import { API_URL, forceLogout, isUnauthorized } from './api';
 
 export interface Category {
     id: number;
@@ -16,7 +16,7 @@ class CategoryService {
             },
         });
 
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }

@@ -1,4 +1,4 @@
-import { API_URL, forceLogout } from './api';
+import { API_URL, forceLogout, isUnauthorized } from './api';
 import type { Book } from '../types';
 
 class BookService {
@@ -15,7 +15,7 @@ class BookService {
                 ...(token && { Authorization: `Bearer ${token}` }),
             },
         });
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -40,7 +40,7 @@ class BookService {
                 ...(token && { Authorization: `Bearer ${token}` }),
             },
         });
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }

@@ -1,4 +1,4 @@
-import { API_URL, forceLogout } from './api';
+import { API_URL, forceLogout, isUnauthorized } from './api';
 import type { Borrowing, EligibilityResponse } from '../types';
 
 class BorrowService {
@@ -11,7 +11,7 @@ class BorrowService {
             },
         });
 
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -33,7 +33,7 @@ class BorrowService {
             },
         });
 
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -55,7 +55,7 @@ class BorrowService {
             },
         });
 
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -82,7 +82,7 @@ class BorrowService {
             },
             body: JSON.stringify({ bookId }),
         });
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -107,7 +107,7 @@ class BorrowService {
                 ...(token && { Authorization: `Bearer ${token}` }),
             },
         });
-        if (response.status === 401) {
+        if (isUnauthorized(response.status)) {
             forceLogout();
             throw new Error('Unauthorized');
         }
@@ -118,6 +118,30 @@ class BorrowService {
         }
 
         return response.json();
+    }
+
+    async cancelBorrow(borrowingId: number): Promise<void> {
+        if (!borrowingId || borrowingId <= 0) {
+            throw new Error('ID peminjaman tidak valid');
+        }
+
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_URL}/borrow/${borrowingId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
+            },
+        });
+        if (isUnauthorized(response.status)) {
+            forceLogout();
+            throw new Error('Unauthorized');
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal membatalkan peminjaman');
+        }
     }
 }
 
