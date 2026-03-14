@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getBookById } from '../services/book.service';
-import { borrowBook, checkEligibility } from '../services/borrow.service';
+import { bookService } from '../services/book.service';
+import { borrowService } from '../services/borrow.service';
 import { useAuth } from '../hooks/useAuth';
 import type { Book } from '../types';
 import { BookOpen, AlertTriangle } from 'lucide-react';
@@ -20,11 +20,11 @@ const BookDetail = () => {
             if (!id) return;
             try {
                 setLoading(true);
-                const data = await getBookById(Number(id));
+                const data = await bookService.getBookById(Number(id));
                 setBook(data);
 
                 if (user) {
-                    const eligibilityData = await checkEligibility();
+                    const eligibilityData = await borrowService.checkEligibility();
                     setEligibility(eligibilityData);
                 }
             } catch (err) {
@@ -52,7 +52,7 @@ const BookDetail = () => {
 
         if (window.confirm(`Apakah Anda yakin ingin meminjam buku "${book.title}"?`)) {
             try {
-                await borrowBook(book.id);
+                await borrowService.borrowBook(book.id);
                 alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
                 navigate('/history');
             } catch (err: any) {

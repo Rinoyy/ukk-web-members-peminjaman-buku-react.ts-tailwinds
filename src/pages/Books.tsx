@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBooks } from '../hooks/useBooks';
 import { useBorrow } from '../hooks/useBorrow';
-import { getCategories, type Category } from '../services/category.service';
+import { categoryService, type Category } from '../services/category.service';
 import type { Book } from '../types';
 
 const Books = () => {
@@ -16,7 +16,7 @@ const Books = () => {
     useEffect(() => {
         const loadCategories = async () => {
             try {
-                const data = await getCategories();
+                const data = await categoryService.getCategories();
                 setCategories(data);
             } catch (error) {
                 console.error('Failed to load categories', error);

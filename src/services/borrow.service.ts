@@ -1,27 +1,44 @@
-import api from './api';
+import { API_URL, getHeaders, handleResponse } from './api';
 import type { Borrowing, EligibilityResponse } from '../types';
 
-export const getBorrowings = async () => {
-    const response = await api.get<Borrowing[]>('/borrow');
-    return response.data;
-};
+class BorrowService {
+    async getBorrowings(): Promise<Borrowing[]> {
+        const response = await fetch(`${API_URL}/borrow`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
 
-export const getMyFines = async () => {
-    const response = await api.get<Borrowing[]>('/borrow/my-fines');
-    return response.data;
-};
+    async getMyFines(): Promise<Borrowing[]> {
+        const response = await fetch(`${API_URL}/borrow/my-fines`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
 
-export const checkEligibility = async () => {
-    const response = await api.get<EligibilityResponse>('/borrow/check-eligibility');
-    return response.data;
-};
+    async checkEligibility(): Promise<EligibilityResponse> {
+        const response = await fetch(`${API_URL}/borrow/check-eligibility`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
 
-export const borrowBook = async (bookId: number) => {
-    const response = await api.post<Borrowing>('/borrow', { bookId });
-    return response.data;
-};
+    async borrowBook(bookId: number): Promise<Borrowing> {
+        const response = await fetch(`${API_URL}/borrow`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ bookId }),
+        });
+        return handleResponse(response);
+    }
 
-export const returnBookRequest = async (borrowingId: number) => {
-    const response = await api.post<Borrowing>(`/borrow/${borrowingId}/return`);
-    return response.data;
-};
+    async returnBookRequest(borrowingId: number): Promise<Borrowing> {
+        const response = await fetch(`${API_URL}/borrow/${borrowingId}/return`, {
+            method: 'POST',
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
+}
+
+export const borrowService = new BorrowService();

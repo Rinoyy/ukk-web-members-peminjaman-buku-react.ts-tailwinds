@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { getBorrowings, borrowBook, returnBookRequest, getMyFines } from '../services/borrow.service';
+import { borrowService } from '../services/borrow.service';
 import type { Borrowing } from '../types';
 
 export const useBorrow = () => {
@@ -11,7 +11,7 @@ export const useBorrow = () => {
     const fetchBorrowings = useCallback(async () => {
         setLoading(true);
         try {
-            const data = await getBorrowings();
+            const data = await borrowService.getBorrowings();
             setBorrowings(data);
             setError(null);
         } catch (err) {
@@ -24,7 +24,7 @@ export const useBorrow = () => {
 
     const fetchMyFines = useCallback(async () => {
         try {
-            const data = await getMyFines();
+            const data = await borrowService.getMyFines();
             setUserFines(data);
         } catch (err) {
             console.error(err);
@@ -33,7 +33,7 @@ export const useBorrow = () => {
 
     const requestBorrow = async (bookId: number) => {
         try {
-            await borrowBook(bookId);
+            await borrowService.borrowBook(bookId);
             fetchBorrowings();
             return true;
         } catch (err: any) {
@@ -45,7 +45,7 @@ export const useBorrow = () => {
 
     const requestReturn = async (borrowingId: number) => {
         try {
-            await returnBookRequest(borrowingId);
+            await borrowService.returnBookRequest(borrowingId);
             fetchBorrowings();
             return true;
         } catch (err) {

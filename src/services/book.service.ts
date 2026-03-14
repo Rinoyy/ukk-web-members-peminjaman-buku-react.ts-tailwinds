@@ -1,12 +1,25 @@
-import api from './api';
+import { API_URL, getHeaders, handleResponse } from './api';
 import type { Book } from '../types';
 
-export const getBooks = async (params?: { search?: string; category?: string }) => {
-    const response = await api.get<Book[]>('/books', { params });
-    return response.data;
-};
+class BookService {
+    async getBooks(params?: { search?: string; category?: string }): Promise<Book[]> {
+        const query = new URLSearchParams();
+        if (params?.search) query.set('search', params.search);
+        if (params?.category) query.set('category', params.category);
+        const qs = query.toString();
 
-export const getBookById = async (id: number) => {
-    const response = await api.get<Book>(`/books/${id}`);
-    return response.data;
-};
+        const response = await fetch(`${API_URL}/books${qs ? `?${qs}` : ''}`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
+
+    async getBookById(id: number): Promise<Book> {
+        const response = await fetch(`${API_URL}/books/${id}`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
+}
+
+export const bookService = new BookService();

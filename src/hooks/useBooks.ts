@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { getBooks } from '../services/book.service';
+import { bookService } from '../services/book.service';
 import type { Book } from '../types';
 
 export const useBooks = () => {
@@ -9,7 +9,7 @@ export const useBooks = () => {
     const fetchBooks = useCallback(async (params?: any) => {
         setLoading(true);
         try {
-            const data = await getBooks(params);
+            const data = await bookService.getBooks(params);
             setBooks(data);
         } catch (error) {
             console.error(error);

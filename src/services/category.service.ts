@@ -1,4 +1,4 @@
-import api from './api';
+import { API_URL, getHeaders, handleResponse } from './api';
 
 export interface Category {
     id: number;
@@ -6,7 +6,13 @@ export interface Category {
     description?: string;
 }
 
-export const getCategories = async () => {
-    const response = await api.get<Category[]>('/categories');
-    return response.data;
-};
+class CategoryService {
+    async getCategories(): Promise<Category[]> {
+        const response = await fetch(`${API_URL}/categories`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    }
+}
+
+export const categoryService = new CategoryService();

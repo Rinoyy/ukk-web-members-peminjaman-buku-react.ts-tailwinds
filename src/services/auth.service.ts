@@ -1,12 +1,24 @@
-import api from './api';
+import { API_URL, getHeaders, handleResponse } from './api';
 import type { LoginResponse, User } from '../types';
 
-export const login = async (credentials: { username: string; password: string }) => {
-    const response = await api.post<LoginResponse>('/auth/login', credentials);
-    return response.data;
-};
+class AuthService {
+    async login(credentials: { username: string; password: string }): Promise<LoginResponse> {
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(credentials),
+        });
+        return handleResponse(response);
+    }
 
-export const register = async (username: string, password: string, role: string) => {
-    const response = await api.post<{ message: string; user: User }>('/auth/register', { username, password, role });
-    return response.data;
-};
+    async register(username: string, password: string, role: string): Promise<{ message: string; user: User }> {
+        const response = await fetch(`${API_URL}/auth/register`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ username, password, role }),
+        });
+        return handleResponse(response);
+    }
+}
+
+export const authService = new AuthService();

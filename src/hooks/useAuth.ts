@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { login as loginService, register as registerService } from '../services/auth.service';
+import { authService } from '../services/auth.service';
 import type { User } from '../types';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ export const useAuth = () => {
 
     const login = async (username: string, password: string) => {
         try {
-            const data = await loginService({ username, password });
+            const data = await authService.login({ username, password });
             if (data.user.role !== 'SISWA') {
                 alert('Access Denied: Only Siswa can login here.');
                 return false;
@@ -36,7 +36,7 @@ export const useAuth = () => {
 
     const register = async (username: string, password: string) => {
         try {
-            await registerService(username, password, 'SISWA');
+            await authService.register(username, password, 'SISWA');
             return true;
         } catch (error) {
             console.error(error);
