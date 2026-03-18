@@ -1,28 +1,26 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { BookOpen, LogIn } from 'lucide-react';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [nisn, setNisn] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
-    const navigate = useNavigate();
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        const success = await login(username, password);
+        const success = await login(nisn, password);
         setLoading(false);
 
-        if (success) {
-            navigate('/dashboard');
-        } else {
-            setError('Login gagal. Periksa username dan password.');
+        if (!success) {
+            setError('Login gagal. Periksa NISN dan password.');
         }
     };
 
@@ -45,13 +43,13 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN</label>
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={nisn}
+                            onChange={(e) => setNisn(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-                            placeholder="Masukkan username"
+                            placeholder="Masukkan NISN"
                             required
                         />
                     </div>

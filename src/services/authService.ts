@@ -2,9 +2,9 @@ import { API_URL, forceLogout, isUnauthorized } from './api';
 import type { LoginResponse, User } from '../types';
 
 class AuthService {
-    async login(credentials: { username: string; password: string }): Promise<LoginResponse> {
-        if (!credentials.username || !credentials.username.trim()) {
-            throw new Error('Username wajib diisi');
+    async login(credentials: { nisn: string; password: string }): Promise<LoginResponse> {
+        if (!credentials.nisn || !credentials.nisn.trim()) {
+            throw new Error('NISN wajib diisi');
         }
         if (!credentials.password || !credentials.password.trim()) {
             throw new Error('Password wajib diisi');
@@ -33,25 +33,18 @@ class AuthService {
         return response.json();
     }
 
-    async register(username: string, password: string, role: string): Promise<{ message: string; user: User }> {
-        if (!username || !username.trim()) {
-            throw new Error('Username wajib diisi');
+    async register(nisn: string, password: string): Promise<{ message: string; user: User }> {
+        if (!nisn || !nisn.trim()) {
+            throw new Error('NISN wajib diisi');
         }
         if (!password || !password.trim()) {
             throw new Error('Password wajib diisi');
         }
-        if (!role || !role.trim()) {
-            throw new Error('Role wajib diisi');
-        }
 
-        const token = localStorage.getItem('token');
         const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { Authorization: `Bearer ${token}` }),
-            },
-            body: JSON.stringify({ username, password, role }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nisn, password }),
         });
         if (isUnauthorized(response.status)) {
             forceLogout();

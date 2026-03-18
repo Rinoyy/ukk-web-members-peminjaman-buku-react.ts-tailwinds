@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import { UserPlus } from 'lucide-react';
 
 const Register = () => {
-    const [username, setUsername] = useState('');
+    const [nisn, setNisn] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -22,13 +22,13 @@ const Register = () => {
         }
 
         setLoading(true);
-        const success = await register(username, password);
+        const success = await register(nisn, password);
         setLoading(false);
 
         if (success) {
-            navigate('/dashboard');
+            navigate('/login');
         } else {
-            setError('Registrasi gagal. Username mungkin sudah digunakan.');
+            setError('Registrasi gagal. NISN tidak terdaftar atau sudah digunakan.');
         }
     };
 
@@ -51,13 +51,13 @@ const Register = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN</label>
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={nisn}
+                            onChange={(e) => setNisn(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
-                            placeholder="Pilih username"
+                            placeholder="Masukkan NISN"
                             required
                         />
                     </div>

@@ -23,11 +23,11 @@ export const useAuth = () => {
         return () => window.removeEventListener('auth:logout', handleForceLogout);
     }, [navigate]);
 
-    const login = async (username: string, password: string) => {
+    const login = async (nisn: string, password: string) => {
         try {
-            const data = await authService.login({ username, password });
+            const data = await authService.login({ nisn, password });
             if (data.user.role !== 'SISWA') {
-                alert('Access Denied: Only Siswa can login here.');
+                alert('Akses ditolak: Halaman ini hanya untuk siswa.');
                 return false;
             }
             localStorage.setItem('token', data.token);
@@ -41,9 +41,9 @@ export const useAuth = () => {
         }
     };
 
-    const register = async (username: string, password: string) => {
+    const register = async (nisn: string, password: string) => {
         try {
-            await authService.register(username, password, 'SISWA');
+            await authService.register(nisn, password);
             return true;
         } catch (error) {
             console.error(error);

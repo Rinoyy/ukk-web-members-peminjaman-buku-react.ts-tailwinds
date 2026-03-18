@@ -29,7 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
                     </div>
                     <div className="flex items-center gap-3">
                         <NotificationBell />
-                        <span className="text-sm opacity-90 hidden sm:inline">Halo, {user?.username}!</span>
+                        <span className="text-sm opacity-90 hidden sm:inline">Halo, {user?.name ?? user?.username}!</span>
                         <button
                             onClick={logout}
                             className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"

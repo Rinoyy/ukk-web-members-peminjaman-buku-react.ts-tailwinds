@@ -1,6 +1,8 @@
 export interface User {
     id: number;
     username: string;
+    nisn?: string;
+    name?: string;
     role: 'ADMIN' | 'SISWA';
     qrCode?: string;
     createdAt: string;

@@ -13,7 +13,8 @@ const Profile = () => {
                     <div className="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-5xl mb-4">
                         👤
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">{user.username}</h1>
+                    <h1 className="text-2xl font-bold text-gray-800 mb-1">{user.name ?? user.username}</h1>
+                    <p className="text-gray-500 text-sm mb-3">NISN: {user.nisn ?? '-'}</p>
                     <span className="inline-block px-4 py-1.5 bg-green-50 border border-green-200 text-green-700 rounded-full text-sm font-medium">
                         ✓ Member Aktif
                     </span>
@@ -56,7 +57,7 @@ const Profile = () => {
 
                 {/* Instruction */}
                 <p className="text-center text-gray-400 text-sm mt-6">
-                    Tunjukkan QR Code ini ke petugas saat berkunjung ke perpustakaan
+                    Tunjukkan QR Code ini saat berkunjung ke perpustakaan
                 </p>
             </div>
         </div>
