@@ -1,31 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import { notificationService, type Notification } from '../services/notification.service';
+import { useState, useRef, useEffect } from 'react';
+import { useNotifications } from '../hooks/useNotifications';
 import { Bell, X, CheckCheck } from 'lucide-react';
 
 const NotificationBell = () => {
-    const [notifications, setNotifications] = useState<Notification[]>([]);
-    const [unreadCount, setUnreadCount] = useState(0);
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const fetchNotifications = async () => {
-        try {
-            const data = await notificationService.getNotifications();
-            setNotifications(data.notifications);
-            setUnreadCount(data.unreadCount);
-        } catch (err) {
-            console.error('Failed to fetch notifications', err);
-        }
-    };
-
-    useEffect(() => {
-        fetchNotifications();
-        // Poll every 30 seconds for new notifications
-        const interval = setInterval(fetchNotifications, 30000);
-        return () => clearInterval(interval);
-    }, []);
-
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -35,28 +16,6 @@ const NotificationBell = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    const handleMarkAsRead = async (id: number) => {
-        try {
-            await notificationService.markAsRead(id);
-            setNotifications(prev =>
-                prev.map(n => (n.id === id ? { ...n, isRead: true } : n))
-            );
-            setUnreadCount(prev => Math.max(0, prev - 1));
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const handleMarkAllAsRead = async () => {
-        try {
-            await notificationService.markAllAsRead();
-            setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
-            setUnreadCount(0);
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     const getTypeIcon = (type: string) => {
         switch (type) {
@@ -80,7 +39,6 @@ const NotificationBell = () => {
 
     return (
         <div className="relative" ref={dropdownRef}>
-            {/* Bell Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="relative p-2 rounded-xl hover:bg-white/20 transition-colors"
@@ -93,10 +51,8 @@ const NotificationBell = () => {
                 )}
             </button>
 
-            {/* Dropdown */}
             {isOpen && (
                 <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
-                    {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b bg-gray-50">
                         <h3 className="font-bold text-gray-800 flex items-center gap-2">
                             <Bell className="w-4 h-4" />
@@ -105,7 +61,7 @@ const NotificationBell = () => {
                         <div className="flex items-center gap-2">
                             {unreadCount > 0 && (
                                 <button
-                                    onClick={handleMarkAllAsRead}
+                                    onClick={markAllAsRead}
                                     className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium"
                                 >
                                     <CheckCheck className="w-3 h-3" />
@@ -118,7 +74,6 @@ const NotificationBell = () => {
                         </div>
                     </div>
 
-                    {/* Notification List */}
                     <div className="max-h-96 overflow-y-auto">
                         {notifications.length === 0 ? (
                             <div className="p-8 text-center text-gray-400">
@@ -129,10 +84,9 @@ const NotificationBell = () => {
                             notifications.map((n) => (
                                 <div
                                     key={n.id}
-                                    onClick={() => !n.isRead && handleMarkAsRead(n.id)}
-                                    className={`p-4 border-b last:border-0 cursor-pointer transition-colors ${
-                                        n.isRead ? 'bg-white' : 'bg-blue-50 hover:bg-blue-100'
-                                    }`}
+                                    onClick={() => !n.isRead && markAsRead(n.id)}
+                                    className={`p-4 border-b last:border-0 cursor-pointer transition-colors ${n.isRead ? 'bg-white' : 'bg-blue-50 hover:bg-blue-100'
+                                        }`}
                                 >
                                     <div className="flex items-start gap-3">
                                         <span className="text-xl mt-0.5">{getTypeIcon(n.type)}</span>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useBooks } from '../hooks/useBooks';
 import { useBorrow } from '../hooks/useBorrow';
-import { categoryService, type Category } from '../services/category.service';
+import { useCategories } from '../hooks/useCategories';
 import type { Book } from '../types';
 import { BookOpen, X } from 'lucide-react';
 
@@ -11,24 +11,12 @@ const API_BASE = 'http://localhost:3000';
 const Books = () => {
     const { books, loading, fetchBooks } = useBooks();
     const { requestBorrow } = useBorrow();
+    const { categories } = useCategories();
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [categoryId, setCategoryId] = useState<number | ''>('');
-    const [categories, setCategories] = useState<Category[]>([]);
     const [borrowModal, setBorrowModal] = useState<Book | null>(null);
     const [borrowLoading, setBorrowLoading] = useState(false);
-
-    useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                const data = await categoryService.getCategories();
-                setCategories(data);
-            } catch (error) {
-                console.error('Failed to load categories', error);
-            }
-        };
-        loadCategories();
-    }, []);
 
     useEffect(() => {
         const params: any = { search };
@@ -92,7 +80,6 @@ const Books = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {books.map((book: Book) => (
                         <div key={book.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
-                            {/* Book Cover */}
                             <div
                                 className="h-48 relative cursor-pointer group overflow-hidden"
                                 onClick={() => handleViewDetail(book.id)}
@@ -156,7 +143,6 @@ const Books = () => {
             {borrowModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl overflow-hidden">
-                        {/* Modal Header with Book Image */}
                         <div className="h-32 relative overflow-hidden">
                             {borrowModal.image ? (
                                 <img

@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { bookService } from '../services/book.service';
-import { borrowService } from '../services/borrow.service';
+import { useParams, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
-import type { Book } from '../types';
+import { useBookDetail } from '../hooks/useBookDetail';
 import { BookOpen, AlertTriangle, X } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
@@ -12,62 +10,37 @@ const BookDetail = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [book, setBook] = useState<Book | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [eligibility, setEligibility] = useState<{ canBorrow: boolean, reason: string | null } | null>(null);
+    const { book, eligibility, loading, error, borrowLoading, fetchBook, fetchEligibility, borrowBook } = useBookDetail();
     const [showBorrowModal, setShowBorrowModal] = useState(false);
-    const [borrowLoading, setBorrowLoading] = useState(false);
 
     useEffect(() => {
-        const fetchBook = async () => {
-            if (!id) return;
-            try {
-                setLoading(true);
-                const data = await bookService.getBookById(Number(id));
-                setBook(data);
+        if (!id) return;
+        fetchBook(Number(id));
+        if (user) fetchEligibility();
+    }, [id, user, fetchBook, fetchEligibility]);
 
-                if (user) {
-                    const eligibilityData = await borrowService.checkEligibility();
-                    setEligibility(eligibilityData);
-                }
-            } catch (err) {
-                console.error('Failed to load book:', err);
-                setError('Buku tidak ditemukan');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBook();
-    }, [id, user]);
-
-    const handleBorrow = async () => {
+    const handleBorrow = () => {
         if (!user) {
             navigate('/login');
             return;
         }
-
         if (eligibility && !eligibility.canBorrow) {
             alert(eligibility.reason);
             return;
         }
-
         if (!book) return;
         setShowBorrowModal(true);
     };
 
     const confirmBorrow = async () => {
         if (!book) return;
-        setBorrowLoading(true);
-        try {
-            await borrowService.borrowBook(book.id);
+        const result = await borrowBook(book.id);
+        if (result.success) {
             setShowBorrowModal(false);
             alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
             navigate('/history');
-        } catch (err: any) {
-            alert(err.response?.data?.message || err.message || 'Gagal meminjam buku');
-        } finally {
-            setBorrowLoading(false);
+        } else {
+            alert(result.error || 'Gagal meminjam buku');
         }
     };
 
@@ -101,7 +74,6 @@ const BookDetail = () => {
 
     return (
         <div className="max-w-4xl mx-auto">
-            {/* Back Button */}
             <button
                 onClick={() => navigate('/books')}
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6 transition-colors"
@@ -111,7 +83,6 @@ const BookDetail = () => {
             </button>
 
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                {/* Header with Cover Image */}
                 <div className="h-64 relative overflow-hidden">
                     {book.image ? (
                         <img
@@ -126,9 +97,7 @@ const BookDetail = () => {
                     )}
                 </div>
 
-                {/* Content */}
                 <div className="p-8">
-                    {/* Title & Category */}
                     <div className="mb-6">
                         <div className="flex items-center gap-3 mb-3">
                             <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full font-medium uppercase tracking-wider">
@@ -145,7 +114,6 @@ const BookDetail = () => {
                         <p className="text-lg text-gray-600">✍️ {book.author}</p>
                     </div>
 
-                    {/* Synopsis */}
                     <div className="mb-8">
                         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                             <span>📝</span>
@@ -164,7 +132,6 @@ const BookDetail = () => {
                         </div>
                     </div>
 
-                    {/* Book Info Grid */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                         <div className="bg-gray-50 rounded-xl p-4 text-center">
                             <span className="text-2xl mb-2 block">📚</span>
@@ -190,7 +157,6 @@ const BookDetail = () => {
                         </div>
                     </div>
 
-                    {/* Action Buttons */}
                     <div className="flex flex-col gap-4 pt-6 border-t">
                         <button
                             onClick={() => navigate('/books')}
@@ -226,11 +192,9 @@ const BookDetail = () => {
                 </div>
             </div>
 
-            {/* Borrow Confirmation Modal */}
             {showBorrowModal && book && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl overflow-hidden">
-                        {/* Modal Header with Book Image */}
                         <div className="h-32 relative overflow-hidden">
                             {book.image ? (
                                 <img

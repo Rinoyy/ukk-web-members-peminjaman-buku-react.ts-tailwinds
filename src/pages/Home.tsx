@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 const Home = () => {
     const { user } = useAuth();
