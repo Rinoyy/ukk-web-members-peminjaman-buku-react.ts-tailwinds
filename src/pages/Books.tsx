@@ -4,7 +4,7 @@ import { useBooks } from '../hooks/useBooks';
 import { useBorrow } from '../hooks/useBorrow';
 import { useCategories } from '../hooks/useCategories';
 import type { Book, BookFilterParams } from '../types';
-import { BookOpen, X } from 'lucide-react';
+import { BookOpen, BookMarked, X, Search, Inbox, PenLine } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -41,15 +41,17 @@ const Books = () => {
 
     return (
         <div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">📚 Koleksi Buku</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><BookMarked className="w-6 h-6" /> Koleksi Buku</h2>
 
             {/* Search & Filter */}
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-6">
                 <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-1">
+                    <div className="flex-1 relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                         <input
                             type="text"
-                            placeholder="🔍 Cari buku..."
+                            placeholder="Cari buku..."
+                            style={{ paddingLeft: '2.25rem' }}
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent"
@@ -73,7 +75,7 @@ const Books = () => {
                 <div className="text-center py-12 text-gray-500">Loading...</div>
             ) : books.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
-                    <span className="text-4xl mb-2 block">📭</span>
+                    <Inbox className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                     Tidak ada buku ditemukan
                 </div>
             ) : (
@@ -92,7 +94,7 @@ const Books = () => {
                                     />
                                 ) : (
                                     <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-400 flex items-center justify-center">
-                                        <span className="text-6xl group-hover:scale-110 transition-transform">📖</span>
+                                        <BookOpen className="w-16 h-16 text-white/70 group-hover:scale-110 transition-transform" />
                                     </div>
                                 )}
                                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -108,7 +110,7 @@ const Books = () => {
                                         {book.title}
                                     </h3>
                                 </div>
-                                <p className="text-sm text-gray-500 mb-1">✍️ {book.author}</p>
+                                <p className="text-sm text-gray-500 mb-1 flex items-center gap-1"><PenLine className="w-3 h-3" /> {book.author}</p>
                                 {book.category?.name && (
                                     <span className="inline-block w-fit px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full mb-3">
                                         {book.category.name}
@@ -152,7 +154,7 @@ const Books = () => {
                                 />
                             ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-500 flex items-center justify-center">
-                                    <span className="text-5xl">📖</span>
+                                    <BookOpen className="w-14 h-14 text-white/70" />
                                 </div>
                             )}
                             <button
@@ -172,7 +174,7 @@ const Books = () => {
 
                             <div className="bg-gray-50 rounded-xl p-3 mb-6">
                                 <p className="text-sm text-gray-700 text-center">
-                                    📋 Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
+                                    Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
                                 </p>
                             </div>
 

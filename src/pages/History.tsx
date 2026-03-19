@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useBorrow } from '../hooks/useBorrow';
-import { AlertCircle, X } from 'lucide-react';
+import { AlertCircle, X, Clock, BookOpen, RefreshCw, Check, Ban, ClipboardList, Inbox, PenLine, Package, type LucideIcon } from 'lucide-react';
 
 const History = () => {
     const { borrowings, loading, fetchBorrowings, requestReturn, cancelBorrow, userFines, fetchMyFines } = useBorrow();
@@ -42,17 +42,19 @@ const History = () => {
             REJECTED: 'bg-red-100 text-red-700',
             CANCELLED: 'bg-gray-100 text-gray-600',
         };
-        const labels: Record<string, string> = {
-            PENDING: '⏳ Menunggu Persetujuan',
-            BORROWED: '📖 Sedang Dipinjam',
-            RETURN_PENDING: '🔄 Menunggu Verifikasi',
-            RETURNED: '✓ Selesai',
-            REJECTED: '✕ Ditolak',
-            CANCELLED: '🚫 Dibatalkan',
+        const config: Record<string, { label: string; Icon: LucideIcon }> = {
+            PENDING:        { label: 'Menunggu Persetujuan', Icon: Clock },
+            BORROWED:       { label: 'Sedang Dipinjam',      Icon: BookOpen },
+            RETURN_PENDING: { label: 'Menunggu Verifikasi',  Icon: RefreshCw },
+            RETURNED:       { label: 'Selesai',              Icon: Check },
+            REJECTED:       { label: 'Ditolak',              Icon: X },
+            CANCELLED:      { label: 'Dibatalkan',           Icon: Ban },
         };
+        const { label, Icon } = config[status] || { label: status, Icon: Clock };
         return (
-            <span className={`px-3 py-1 rounded-full text-xs font-bold ${styles[status] || 'bg-gray-100 text-gray-600'}`}>
-                {labels[status] || status}
+            <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 ${styles[status] || 'bg-gray-100 text-gray-600'}`}>
+                <Icon className="w-3 h-3" />
+                {label}
             </span>
         );
     };
@@ -60,7 +62,7 @@ const History = () => {
     return (
         <div className="max-w-4xl mx-auto pb-20">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <span>📋</span> Riwayat Peminjaman
+                <ClipboardList className="w-6 h-6" /> Riwayat Peminjaman
             </h2>
 
             {/* Fines Alert */}
@@ -102,7 +104,7 @@ const History = () => {
                 </div>
             ) : borrowings.length === 0 ? (
                 <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-                    <div className="text-6xl mb-4">📭</div>
+                    <Inbox className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Belum Ada Riwayat</h3>
                     <p className="text-gray-500">Anda belum pernah melakukan peminjaman buku.</p>
                 </div>
@@ -121,7 +123,7 @@ const History = () => {
                                     <div className="flex justify-between w-full mb-2">
                                         <div>
                                             <h3 className="font-bold text-lg text-gray-800 line-clamp-1">{b.book?.title}</h3>
-                                            <p className="text-sm text-gray-500">✍️ {b.book?.author}</p>
+                                            <p className="text-sm text-gray-500 flex items-center gap-1"><PenLine className="w-3 h-3" /> {b.book?.author}</p>
                                         </div>
                                         <div className="shrink-0">
                                             {getStatusBadge(b.status)}
@@ -192,7 +194,7 @@ const History = () => {
                                             )}
                                             {b.status === 'BORROWED' && !b.isPickedUp && (
                                                 <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-200 rounded-xl">
-                                                    <span className="text-lg">📦</span>
+                                                    <Package className="w-5 h-5 text-orange-500" />
                                                     <div className="flex flex-col">
                                                         <span className="text-sm font-bold text-orange-600">Ambil Buku!</span>
                                                         <span className="text-xs text-orange-400">Menunggu di perpustakaan</span>

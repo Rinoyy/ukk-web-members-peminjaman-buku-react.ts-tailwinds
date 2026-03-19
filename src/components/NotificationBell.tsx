@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '../hooks/useNotifications';
-import { Bell, X, CheckCheck } from 'lucide-react';
+import { Bell, BellOff, X, CheckCheck, CheckCircle2, XCircle, Clock, type LucideIcon } from 'lucide-react';
 
 const NotificationBell = () => {
     const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
@@ -17,12 +17,12 @@ const NotificationBell = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const getTypeIcon = (type: string) => {
+    const getTypeIcon = (type: string): LucideIcon => {
         switch (type) {
-            case 'BORROW_APPROVED': return '✅';
-            case 'BORROW_REJECTED': return '❌';
-            case 'PICKUP_REMINDER': return '⏰';
-            default: return '🔔';
+            case 'BORROW_APPROVED': return CheckCircle2;
+            case 'BORROW_REJECTED': return XCircle;
+            case 'PICKUP_REMINDER': return Clock;
+            default: return Bell;
         }
     };
 
@@ -77,7 +77,7 @@ const NotificationBell = () => {
                     <div className="max-h-96 overflow-y-auto">
                         {notifications.length === 0 ? (
                             <div className="p-8 text-center text-gray-400">
-                                <span className="text-3xl block mb-2">🔕</span>
+                                <BellOff className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                                 Belum ada notifikasi
                             </div>
                         ) : (
@@ -89,7 +89,7 @@ const NotificationBell = () => {
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <span className="text-xl mt-0.5">{getTypeIcon(n.type)}</span>
+                                        {(() => { const Icon = getTypeIcon(n.type); return <Icon className="w-5 h-5 mt-0.5 shrink-0" />; })()}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
                                                 <h4 className={`text-sm font-bold truncate ${n.isRead ? 'text-gray-600' : 'text-gray-900'}`}>

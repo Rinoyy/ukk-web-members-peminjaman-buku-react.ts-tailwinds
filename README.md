@@ -1,42 +1,103 @@
-# Portal Anggota Perpustakaan Digital 📖
+# Portal Anggota — Perpustakaan Digital
 
-Repositori ini berisi kode sumber untuk aplikasi **Web Member**, sebuah portal khusus yang dirancang untuk siswa agar dapat mengakses layanan perpustakaan secara mandiri melalui perangkat mereka.
+Aplikasi web **mobile-first** untuk **Siswa** mengakses layanan perpustakaan secara mandiri.
 
-## 🌟 Gambaran Umum
-Portal ini memungkinkan siswa untuk mencari buku, melihat detail koleksi, memantau riwayat peminjaman, hingga menampilkan kartu anggota digital dalam bentuk QR Code untuk keperluan transaksi di perpustakaan.
-
-## 💡 Fitur Utama
-
-### 🔐 Akses Mandiri (Self-Service)
-- **Registrasi & Login:** Siswa dapat mendaftarkan akun mereka sendiri ke dalam sistem.
-- **Profil Digital:** Menampilkan informasi profil siswa beserta **QR Code unik** yang berfungsi sebagai identitas digital saat berkunjung ke perpustakaan.
-
-### 🔍 E-Katalog (Pencarian Buku)
-- **Katalog Buku:** Menjelajahi daftar koleksi buku yang tersedia di perpustakaan.
-- **Detail Buku:** Melihat informasi lengkap mengenai buku, termasuk ketersediaan stok/salinan buku secara real-time.
-
-### 📜 Riwayat & Status
-- **Riwayat Peminjaman:** Melihat daftar buku yang sedang dipinjam maupun yang sudah dikembalikan.
-- **Informasi Denda:** Memantau status denda jika terdapat keterlambatan pengembalian atau kerusakan buku.
-
-## 💻 Teknologi
-Aplikasi ini dibangun dengan stack teknologi modern untuk performa yang optimal:
-- **Framework:** React 19 (Vite)
-- **Bahasa:** TypeScript
-- **Styling:** Tailwind CSS
-- **Icons:** Lucide React
-
-## 🛠 Panduan Instalasi
-
-1. Instal dependensi:
-   ```bash
-   npm install
-   ```
-2. Jalankan aplikasi dalam mode pengembangan:
-   ```bash
-   npm run dev
-   ```
-3. Buka browser dan akses `http://localhost:5173`.
+**Port development:** `http://localhost:5174`
 
 ---
-*Dokumentasi ini memberikan gambaran umum mengenai fungsionalitas Portal Anggota.*
+
+## Teknologi
+
+| Teknologi | Versi | Kegunaan |
+|---|---|---|
+| React | 19 | UI Framework |
+| TypeScript | ~5.x | Type safety |
+| Vite | ~6.x | Build tool |
+| TailwindCSS | ~3.x | Styling (mobile-first) |
+| React Router | v7 | Routing |
+| Fetch API | native | HTTP client |
+| Lucide React | — | Icon library |
+
+---
+
+## Status Peminjaman (Tampil di Riwayat)
+
+| Status | Tampilan |
+|---|---|
+| `PENDING` | Menunggu Persetujuan — tombol "Batalkan" |
+| `BORROWED` | Sedang Dipinjam — tombol "Kembalikan" (jika sudah diambil) |
+| `RETURN_PENDING` | Menunggu Verifikasi Admin |
+| `RETURNED` | Sudah Dikembalikan |
+| `REJECTED` | Ditolak Admin |
+| `CANCELLED` | Dibatalkan |
+
+---
+
+## Fitur Utama
+
+### Akses Mandiri
+- Registrasi dengan NISN (wajib terdaftar di whitelist sekolah)
+- Login menggunakan NISN + password
+- QR Code pribadi otomatis di-generate saat registrasi
+
+### E-Katalog Buku
+- Jelajahi semua koleksi buku
+- Cari berdasarkan judul atau pengarang
+- Filter berdasarkan kategori
+- Lihat stok AVAILABLE secara real-time
+- Detail buku + status tiap salinan fisik (BookCopy)
+
+### Peminjaman Buku
+- Ajukan peminjaman dari halaman detail buku
+- Sistem otomatis mencari salinan (BookCopy) yang AVAILABLE
+- Lihat status real-time: PENDING → BORROWED → RETURN_PENDING → RETURNED
+- Batalkan permintaan selama masih PENDING
+- Ajukan pengembalian saat buku sudah diambil
+
+**Syarat bisa meminjam:**
+- Tidak ada buku aktif yang belum dikembalikan
+- Tidak ada denda yang belum dilunasi
+
+### Riwayat & Denda
+- Semua riwayat peminjaman dengan status dan tanggal
+- Informasi denda: jumlah, status pembayaran
+
+### QR Code & Check-In Kunjungan
+- QR Code pribadi tampil di halaman Profile
+- Scan QR untuk check-in saat masuk perpustakaan
+
+### Notifikasi
+- Pemberitahuan saat peminjaman disetujui/ditolak
+- Pengingat batas pengambilan buku
+- Badge merah di ikon lonceng jika ada yang belum dibaca
+
+---
+
+## Menjalankan
+
+```bash
+npm install
+npm run dev
+```
+
+Pastikan backend (`express-qr-backend`) sudah berjalan di port 3000.
+
+---
+
+## Navigasi (Bottom Navigation)
+
+| Tab | Halaman | Fungsi |
+|---|---|---|
+| Home | `/home` | Beranda + status aktif |
+| Books | `/books` | Katalog buku |
+| History | `/history` | Riwayat peminjaman |
+| Profile | `/profile` | Profil + QR Code |
+
+---
+
+## Dokumentasi Lengkap
+
+| File | Isi |
+|---|---|
+| [docs/business-flow.md](./docs/business-flow.md) | Alur bisnis per fitur |
+| [docs/technical-flow.md](./docs/technical-flow.md) | Detail teknis, routing, types |

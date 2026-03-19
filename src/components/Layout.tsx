@@ -2,16 +2,17 @@ import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import NotificationBell from './NotificationBell';
+import { Home, BookMarked, ClipboardList, User, BookOpen, type LucideIcon } from 'lucide-react';
 
 interface LayoutProps {
     children: ReactNode;
 }
 
-const navItems = [
-    { path: '/dashboard', label: 'Beranda', icon: '🏠' },
-    { path: '/books', label: 'Buku', icon: '📚' },
-    { path: '/history', label: 'Riwayat', icon: '📋' },
-    { path: '/profile', label: 'Profil', icon: '👤' },
+const navItems: { path: string; label: string; icon: LucideIcon }[] = [
+    { path: '/dashboard', label: 'Beranda', icon: Home },
+    { path: '/books',     label: 'Buku',    icon: BookMarked },
+    { path: '/history',   label: 'Riwayat', icon: ClipboardList },
+    { path: '/profile',   label: 'Profil',  icon: User },
 ];
 
 const Layout = ({ children }: LayoutProps) => {
@@ -24,7 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
             <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 text-gray-800 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <span className="text-2xl">📖</span>
+                        <BookOpen className="w-6 h-6 text-blue-600" />
                         <h1 className="text-xl font-bold">Perpustakaan</h1>
                     </div>
                     <div className="flex items-center gap-3">
@@ -59,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
                                         : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
-                                <span className="text-2xl">{item.icon}</span>
+                                <item.icon className="w-6 h-6" />
                                 <span className="text-xs mt-1 font-medium">{item.label}</span>
                                 {isActive && (
                                     <div className="absolute bottom-0 w-12 h-1 bg-gray-900 rounded-t-full" />

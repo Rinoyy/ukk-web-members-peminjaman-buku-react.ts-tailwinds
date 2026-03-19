@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useBorrow } from '../hooks/useBorrow';
+import { Package } from 'lucide-react';
 
 const SiswaHistory = () => {
     const { borrowings, loading, fetchBorrowings, requestReturn } = useBorrow();
@@ -57,7 +58,7 @@ const SiswaHistory = () => {
                                 <td className="p-3 border-b">
                                     {b.status === 'BORROWED' && !b.isPickedUp && (
                                         <div className="flex flex-col gap-0.5">
-                                            <span className="text-sm font-medium text-orange-600">📦 Ambil bukumu!</span>
+                                            <span className="text-sm font-medium text-orange-600 flex items-center gap-1"><Package className="w-4 h-4" /> Ambil bukumu!</span>
                                             <span className="text-xs text-gray-500">Buku menunggu di perpustakaan</span>
                                         </div>
                                     )}

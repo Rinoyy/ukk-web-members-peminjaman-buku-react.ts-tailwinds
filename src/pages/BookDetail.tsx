@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { useBookDetail } from '../hooks/useBookDetail';
-import { BookOpen, AlertTriangle, X } from 'lucide-react';
+import { BookOpen, BookMarked, AlertTriangle, X, PenLine, FileText, Package, Hash, Inbox, ChevronLeft } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -59,7 +59,7 @@ const BookDetail = () => {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
                 <div className="text-center">
-                    <span className="text-6xl mb-4 block">📭</span>
+                    <Inbox className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                     <p className="text-gray-500 mb-4">{error || 'Buku tidak ditemukan'}</p>
                     <button
                         onClick={() => navigate('/books')}
@@ -78,7 +78,7 @@ const BookDetail = () => {
                 onClick={() => navigate('/books')}
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6 cursor-pointer transition-colors"
             >
-                <span>←</span>
+                <ChevronLeft className="w-4 h-4" />
                 <span>Kembali ke Daftar Buku</span>
             </button>
 
@@ -92,7 +92,7 @@ const BookDetail = () => {
                         />
                     ) : (
                         <div className="w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 flex items-center justify-center">
-                            <span className="text-8xl">📖</span>
+                            <BookOpen className="w-24 h-24 text-white/80" />
                         </div>
                     )}
                 </div>
@@ -111,12 +111,12 @@ const BookDetail = () => {
                             </span>
                         </div>
                         <h1 className="text-3xl font-bold text-gray-800 mb-2">{book.title}</h1>
-                        <p className="text-lg text-gray-600">✍️ {book.author}</p>
+                        <p className="text-lg text-gray-600 flex items-center gap-1"><PenLine className="w-4 h-4" /> {book.author}</p>
                     </div>
 
                     <div className="mb-8">
                         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                            <span>📝</span>
+                            <FileText className="w-5 h-5" />
                             <span>Sinopsis</span>
                         </h2>
                         <div className="bg-gray-50 rounded-xl p-6">
@@ -134,24 +134,24 @@ const BookDetail = () => {
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                         <div className="bg-gray-50 rounded-xl p-4 text-center">
-                            <span className="text-2xl mb-2 block">📚</span>
+                            <BookMarked className="w-6 h-6 mx-auto mb-2 text-gray-500" />
                             <span className="text-xs text-gray-400 uppercase font-semibold block">Kategori</span>
                             <span className="text-sm font-medium text-gray-700">{book.category?.name || 'Umum'}</span>
                         </div>
                         <div className="bg-gray-50 rounded-xl p-4 text-center">
-                            <span className="text-2xl mb-2 block">✍️</span>
+                            <PenLine className="w-6 h-6 mx-auto mb-2 text-gray-500" />
                             <span className="text-xs text-gray-400 uppercase font-semibold block">Penulis</span>
                             <span className="text-sm font-medium text-gray-700">{book.author}</span>
                         </div>
                         <div className="bg-gray-50 rounded-xl p-4 text-center">
-                            <span className="text-2xl mb-2 block">📦</span>
+                            <Package className="w-6 h-6 mx-auto mb-2 text-gray-500" />
                             <span className="text-xs text-gray-400 uppercase font-semibold block">Stok</span>
                             <span className={`text-sm font-bold ${book.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
                                 {book.stock} Tersedia
                             </span>
                         </div>
                         <div className="bg-gray-50 rounded-xl p-4 text-center">
-                            <span className="text-2xl mb-2 block">🆔</span>
+                            <Hash className="w-6 h-6 mx-auto mb-2 text-gray-500" />
                             <span className="text-xs text-gray-400 uppercase font-semibold block">ID Buku</span>
                             <span className="text-sm font-medium text-gray-700">#{book.id}</span>
                         </div>
@@ -160,9 +160,9 @@ const BookDetail = () => {
                     <div className="flex flex-col gap-4 pt-6 border-t">
                         <button
                             onClick={() => navigate('/books')}
-                            className="w-full py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl cursor-pointer transition-colors border border-gray-200"
+                            className="w-full py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl cursor-pointer transition-colors border border-gray-200 flex items-center justify-center gap-2"
                         >
-                            ← Kembali
+                            <ChevronLeft className="w-4 h-4" /> Kembali
                         </button>
 
                         <button
@@ -204,7 +204,7 @@ const BookDetail = () => {
                                 />
                             ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                                    <span className="text-5xl">📖</span>
+                                    <BookOpen className="w-14 h-14 text-white/80" />
                                 </div>
                             )}
                             <button
@@ -224,7 +224,7 @@ const BookDetail = () => {
 
                             <div className="bg-blue-50 rounded-xl p-3 mb-6">
                                 <p className="text-sm text-blue-700 text-center">
-                                    📋 Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
+                                    Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
                                 </p>
                             </div>
 

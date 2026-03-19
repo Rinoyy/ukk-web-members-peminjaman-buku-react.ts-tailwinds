@@ -1,4 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
+import { User, CheckCircle2, Smartphone } from 'lucide-react';
 
 const Profile = () => {
     const { user } = useAuth();
@@ -10,20 +11,20 @@ const Profile = () => {
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 p-8 max-w-md w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-5xl mb-4">
-                        👤
+                    <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <User className="w-12 h-12 text-gray-400" />
                     </div>
                     <h1 className="text-2xl font-bold text-gray-800 mb-1">{user.name ?? user.username}</h1>
                     <p className="text-gray-500 text-sm mb-3">NISN: {user.nisn ?? '-'}</p>
-                    <span className="inline-block px-4 py-1.5 bg-green-50 border border-green-200 text-green-700 rounded-full text-sm font-medium">
-                        ✓ Member Aktif
+                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-green-50 border border-green-200 text-green-700 rounded-full text-sm font-medium">
+                        <CheckCircle2 className="w-4 h-4" /> Member Aktif
                     </span>
                 </div>
 
                 {/* QR Code */}
                 <div className="bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-100">
-                    <p className="text-center text-gray-600 text-sm font-medium mb-4">
-                        📱 Scan untuk Check-in Perpustakaan
+                    <p className="text-center text-gray-600 text-sm font-medium mb-4 flex items-center justify-center gap-1.5">
+                        <Smartphone className="w-4 h-4" /> Scan untuk Check-in Perpustakaan
                     </p>
                     {user.qrCode ? (
                         <img
