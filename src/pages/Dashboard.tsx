@@ -19,7 +19,7 @@ const Dashboard = () => {
                         )}
                         <button
                             onClick={logout}
-                            className="px-4 py-2 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50"
+                            className="px-4 py-2 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50 cursor-pointer"
                         >
                             Logout
                         </button>
@@ -32,7 +32,7 @@ const Dashboard = () => {
                     <nav className="-mb-px flex gap-6">
                         <button
                             onClick={() => setActiveTab('browse')}
-                            className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'browse'
+                            className={`py-4 px-1 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'browse'
                                     ? 'border-gray-900 text-gray-900'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}
@@ -41,7 +41,7 @@ const Dashboard = () => {
                         </button>
                         <button
                             onClick={() => setActiveTab('history')}
-                            className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'history'
+                            className={`py-4 px-1 border-b-2 font-medium text-sm cursor-pointer ${activeTab === 'history'
                                     ? 'border-gray-900 text-gray-900'
                                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                 }`}

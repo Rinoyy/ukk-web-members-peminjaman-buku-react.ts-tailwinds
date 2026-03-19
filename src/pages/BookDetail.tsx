@@ -63,7 +63,7 @@ const BookDetail = () => {
                     <p className="text-gray-500 mb-4">{error || 'Buku tidak ditemukan'}</p>
                     <button
                         onClick={() => navigate('/books')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
                     >
                         Kembali ke Daftar Buku
                     </button>
@@ -76,7 +76,7 @@ const BookDetail = () => {
         <div className="max-w-4xl mx-auto">
             <button
                 onClick={() => navigate('/books')}
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6 transition-colors"
+                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 mb-6 cursor-pointer transition-colors"
             >
                 <span>←</span>
                 <span>Kembali ke Daftar Buku</span>
@@ -160,7 +160,7 @@ const BookDetail = () => {
                     <div className="flex flex-col gap-4 pt-6 border-t">
                         <button
                             onClick={() => navigate('/books')}
-                            className="w-full py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl transition-colors border border-gray-200"
+                            className="w-full py-3 text-gray-600 font-medium hover:bg-gray-50 rounded-xl cursor-pointer transition-colors border border-gray-200"
                         >
                             ← Kembali
                         </button>
@@ -170,7 +170,7 @@ const BookDetail = () => {
                             disabled={book.stock < 1 || (eligibility !== null && !eligibility.canBorrow)}
                             className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transform transition-all active:scale-95 flex items-center justify-center gap-2
                                 ${book.stock > 0 && (!eligibility || eligibility.canBorrow)
-                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-500/30'
+                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-blue-500/30 cursor-pointer'
                                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                         >
                             <BookOpen className="w-6 h-6" />
@@ -209,7 +209,7 @@ const BookDetail = () => {
                             )}
                             <button
                                 onClick={() => setShowBorrowModal(false)}
-                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 transition-colors"
+                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 cursor-pointer transition-colors"
                             >
                                 <X className="w-4 h-4 text-white" />
                             </button>
@@ -231,14 +231,14 @@ const BookDetail = () => {
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowBorrowModal(false)}
-                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer font-medium transition-colors"
                                 >
                                     Batal
                                 </button>
                                 <button
                                     onClick={confirmBorrow}
                                     disabled={borrowLoading}
-                                    className="flex-1 py-3 px-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 px-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     <BookOpen className="w-4 h-4" />
                                     {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}

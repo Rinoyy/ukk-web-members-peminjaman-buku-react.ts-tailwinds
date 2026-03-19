@@ -63,7 +63,7 @@ const SiswaBooks = () => {
                                 {book.stock > 0 && (
                                     <button
                                         onClick={() => handleBorrow(book.id)}
-                                        className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
+                                        className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 cursor-pointer"
                                     >
                                         Borrow
                                     </button>

@@ -41,7 +41,7 @@ const NotificationBell = () => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                className="relative p-2 rounded-xl hover:bg-gray-100 cursor-pointer transition-colors"
             >
                 <Bell className="w-6 h-6 text-gray-700" />
                 {unreadCount > 0 && (
@@ -62,13 +62,13 @@ const NotificationBell = () => {
                             {unreadCount > 0 && (
                                 <button
                                     onClick={markAllAsRead}
-                                    className="text-xs text-gray-600 hover:text-gray-800 flex items-center gap-1 font-medium"
+                                    className="text-xs text-gray-600 hover:text-gray-800 flex items-center gap-1 font-medium cursor-pointer"
                                 >
                                     <CheckCheck className="w-3 h-3" />
                                     Tandai semua
                                 </button>
                             )}
-                            <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-gray-200 rounded-lg">
+                            <button onClick={() => setIsOpen(false)} className="p-1 hover:bg-gray-200 rounded-lg cursor-pointer">
                                 <X className="w-4 h-4 text-gray-400" />
                             </button>
                         </div>

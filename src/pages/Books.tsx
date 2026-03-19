@@ -58,7 +58,7 @@ const Books = () => {
                     <select
                         value={categoryId}
                         onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : '')}
-                        className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 bg-white"
+                        className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 bg-white cursor-pointer"
                     >
                         <option value="">Semua Kategori</option>
                         {categories.map(cat => (
@@ -126,7 +126,7 @@ const Books = () => {
                                         onClick={() => setBorrowModal(book)}
                                         disabled={book.stock <= 0}
                                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${book.stock > 0
-                                            ? 'bg-gray-900 text-white hover:bg-gray-700 shadow-gray-200 shadow-md'
+                                            ? 'bg-gray-900 text-white hover:bg-gray-700 shadow-gray-200 shadow-md cursor-pointer'
                                             : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                             }`}
                                     >
@@ -157,7 +157,7 @@ const Books = () => {
                             )}
                             <button
                                 onClick={() => setBorrowModal(null)}
-                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 transition-colors"
+                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 cursor-pointer transition-colors"
                             >
                                 <X className="w-4 h-4 text-white" />
                             </button>
@@ -179,14 +179,14 @@ const Books = () => {
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setBorrowModal(null)}
-                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer font-medium transition-colors"
                                 >
                                     Batal
                                 </button>
                                 <button
                                     onClick={handleBorrow}
                                     disabled={borrowLoading}
-                                    className="flex-1 py-3 px-4 text-white bg-gray-900 rounded-xl hover:bg-gray-700 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 px-4 text-white bg-gray-900 rounded-xl hover:bg-gray-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     <BookOpen className="w-4 h-4" />
                                     {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}

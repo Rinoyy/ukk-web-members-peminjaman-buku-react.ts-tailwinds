@@ -185,7 +185,7 @@ const History = () => {
                                             {b.status === 'PENDING' && (
                                                 <button
                                                     onClick={() => setCancelModal(b.id)}
-                                                    className="px-4 py-2 text-red-600 border border-red-200 text-sm font-medium rounded-xl hover:bg-red-50 transition-colors"
+                                                    className="px-4 py-2 text-red-600 border border-red-200 text-sm font-medium rounded-xl hover:bg-red-50 cursor-pointer transition-colors"
                                                 >
                                                     Batalkan
                                                 </button>
@@ -202,7 +202,7 @@ const History = () => {
                                             {b.status === 'BORROWED' && b.isPickedUp && (
                                                 <button
                                                     onClick={() => handleReturn(b.id)}
-                                                    className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-xl hover:shadow-lg shadow-orange-200 transition-all active:scale-95"
+                                                    className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-xl hover:shadow-lg shadow-orange-200 cursor-pointer transition-all active:scale-95"
                                                 >
                                                     Kembalikan Buku
                                                 </button>
@@ -222,7 +222,7 @@ const History = () => {
                     <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl p-6">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-bold text-gray-900">Batalkan Peminjaman?</h3>
-                            <button onClick={() => setCancelModal(null)} className="p-1 hover:bg-gray-100 rounded-lg">
+                            <button onClick={() => setCancelModal(null)} className="p-1 hover:bg-gray-100 rounded-lg cursor-pointer">
                                 <X className="w-5 h-5 text-gray-500" />
                             </button>
                         </div>
@@ -232,14 +232,14 @@ const History = () => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setCancelModal(null)}
-                                className="flex-1 py-2.5 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 font-medium transition-colors"
+                                className="flex-1 py-2.5 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer font-medium transition-colors"
                             >
                                 Kembali
                             </button>
                             <button
                                 onClick={handleCancel}
                                 disabled={cancelLoading}
-                                className="flex-1 py-2.5 px-4 text-white bg-red-600 rounded-xl hover:bg-red-700 font-medium transition-colors disabled:opacity-50"
+                                className="flex-1 py-2.5 px-4 text-white bg-red-600 rounded-xl hover:bg-red-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {cancelLoading ? 'Loading...' : 'Ya, Batalkan'}
                             </button>

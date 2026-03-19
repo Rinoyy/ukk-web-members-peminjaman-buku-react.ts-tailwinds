@@ -64,7 +64,7 @@ const SiswaHistory = () => {
                                     {b.status === 'BORROWED' && b.isPickedUp && (
                                         <button
                                             onClick={() => handleReturn(b.id)}
-                                            className="px-3 py-1 text-sm text-white bg-indigo-600 rounded hover:bg-indigo-700"
+                                            className="px-3 py-1 text-sm text-white bg-indigo-600 rounded hover:bg-indigo-700 cursor-pointer"
                                         >
                                             Kembalikan
                                         </button>
