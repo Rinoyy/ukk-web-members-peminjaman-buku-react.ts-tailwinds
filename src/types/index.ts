@@ -37,6 +37,7 @@ export interface Borrowing {
     lateFee: number;
     damageFee: number;
     totalFine: number;
+    isPickedUp: boolean;
     isPaid: boolean;
     createdAt: string;
     book?: Book;

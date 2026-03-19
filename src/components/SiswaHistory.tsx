@@ -55,12 +55,18 @@ const SiswaHistory = () => {
                                     {new Date(b.borrowDate).toLocaleDateString()}
                                 </td>
                                 <td className="p-3 border-b">
-                                    {b.status === 'BORROWED' && (
+                                    {b.status === 'BORROWED' && !b.isPickedUp && (
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-sm font-medium text-orange-600">📦 Ambil bukumu!</span>
+                                            <span className="text-xs text-gray-500">Buku menunggu di perpustakaan</span>
+                                        </div>
+                                    )}
+                                    {b.status === 'BORROWED' && b.isPickedUp && (
                                         <button
                                             onClick={() => handleReturn(b.id)}
                                             className="px-3 py-1 text-sm text-white bg-indigo-600 rounded hover:bg-indigo-700"
                                         >
-                                            Return
+                                            Kembalikan
                                         </button>
                                     )}
                                 </td>

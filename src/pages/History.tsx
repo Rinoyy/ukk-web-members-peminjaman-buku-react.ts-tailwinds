@@ -190,7 +190,16 @@ const History = () => {
                                                     Batalkan
                                                 </button>
                                             )}
-                                            {b.status === 'BORROWED' && (
+                                            {b.status === 'BORROWED' && !b.isPickedUp && (
+                                                <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 border border-orange-200 rounded-xl">
+                                                    <span className="text-lg">📦</span>
+                                                    <div className="flex flex-col">
+                                                        <span className="text-sm font-bold text-orange-600">Ambil Buku!</span>
+                                                        <span className="text-xs text-orange-400">Menunggu di perpustakaan</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {b.status === 'BORROWED' && b.isPickedUp && (
                                                 <button
                                                     onClick={() => handleReturn(b.id)}
                                                     className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-xl hover:shadow-lg shadow-orange-200 transition-all active:scale-95"
