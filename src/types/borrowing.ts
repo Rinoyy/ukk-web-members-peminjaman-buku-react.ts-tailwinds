@@ -22,5 +22,6 @@ export interface Borrowing {
     isPaid: boolean;
     createdAt: string;
     book?: Book;
+    bookCopy?: { book: Book };
     user?: User;
 }

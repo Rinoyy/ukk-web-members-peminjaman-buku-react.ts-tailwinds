@@ -33,8 +33,8 @@ const SiswaHistory = () => {
                     <tbody>
                         {borrowings.map((b) => (
                             <tr key={b.id} className="hover:bg-gray-50">
-                                <td className="p-3 border-b font-medium">{b.book?.title}</td>
-                                <td className="p-3 border-b">{b.book?.author}</td>
+                                <td className="p-3 border-b font-medium">{b.bookCopy?.book?.title ?? b.book?.title}</td>
+                                <td className="p-3 border-b">{b.bookCopy?.book?.author ?? b.book?.author}</td>
                                 <td className="p-3 border-b">
                                     <span
                                         className={`px-2 py-1 text-xs rounded-full ${b.status === 'PENDING'
