@@ -41,9 +41,9 @@ const NotificationBell = () => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 rounded-xl hover:bg-white/20 transition-colors"
+                className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
             >
-                <Bell className="w-6 h-6 text-white" />
+                <Bell className="w-6 h-6 text-gray-700" />
                 {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 min-w-[20px] h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
                         {unreadCount > 9 ? '9+' : unreadCount}
@@ -62,7 +62,7 @@ const NotificationBell = () => {
                             {unreadCount > 0 && (
                                 <button
                                     onClick={markAllAsRead}
-                                    className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 font-medium"
+                                    className="text-xs text-gray-600 hover:text-gray-800 flex items-center gap-1 font-medium"
                                 >
                                     <CheckCheck className="w-3 h-3" />
                                     Tandai semua
@@ -85,7 +85,7 @@ const NotificationBell = () => {
                                 <div
                                     key={n.id}
                                     onClick={() => !n.isRead && markAsRead(n.id)}
-                                    className={`p-4 border-b last:border-0 cursor-pointer transition-colors ${n.isRead ? 'bg-white' : 'bg-blue-50 hover:bg-blue-100'
+                                    className={`p-4 border-b last:border-0 cursor-pointer transition-colors ${n.isRead ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100'
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
@@ -96,7 +96,7 @@ const NotificationBell = () => {
                                                     {n.title}
                                                 </h4>
                                                 {!n.isRead && (
-                                                    <span className="shrink-0 w-2 h-2 bg-blue-500 rounded-full ml-2" />
+                                                    <span className="shrink-0 w-2 h-2 bg-gray-800 rounded-full ml-2" />
                                                 )}
                                             </div>
                                             <p className={`text-sm whitespace-pre-line ${n.isRead ? 'text-gray-400' : 'text-gray-600'}`}>

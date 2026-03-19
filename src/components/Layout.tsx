@@ -19,9 +19,9 @@ const Layout = ({ children }: LayoutProps) => {
     const location = useLocation();
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-white">
             {/* Top Navbar */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+            <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 text-gray-800 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <span className="text-2xl">📖</span>
@@ -29,10 +29,10 @@ const Layout = ({ children }: LayoutProps) => {
                     </div>
                     <div className="flex items-center gap-3">
                         <NotificationBell />
-                        <span className="text-sm opacity-90 hidden sm:inline">Halo, {user?.name ?? user?.username}!</span>
+                        <span className="text-sm text-gray-600 hidden sm:inline">Halo, {user?.name ?? user?.username}!</span>
                         <button
                             onClick={logout}
-                            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
                         >
                             Keluar
                         </button>
@@ -55,14 +55,14 @@ const Layout = ({ children }: LayoutProps) => {
                                 key={item.path}
                                 to={item.path}
                                 className={`flex flex-col items-center py-3 px-4 transition-colors ${isActive
-                                        ? 'text-blue-600'
+                                        ? 'text-gray-900'
                                         : 'text-gray-500 hover:text-gray-700'
                                     }`}
                             >
                                 <span className="text-2xl">{item.icon}</span>
                                 <span className="text-xs mt-1 font-medium">{item.label}</span>
                                 {isActive && (
-                                    <div className="absolute bottom-0 w-12 h-1 bg-blue-600 rounded-t-full" />
+                                    <div className="absolute bottom-0 w-12 h-1 bg-gray-900 rounded-t-full" />
                                 )}
                             </Link>
                         );

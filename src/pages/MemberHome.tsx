@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import type { User } from '../types';
 
 export default function MemberHome() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ export default function MemberHome() {
     if (!user) return <div className="p-8">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen bg-white">
             <nav className="bg-white shadow p-4 flex justify-between items-center">
                 <h1 className="text-xl font-bold text-gray-800">Member Area ({user.role})</h1>
                 <button
@@ -35,8 +36,8 @@ export default function MemberHome() {
             <main className="max-w-4xl mx-auto p-8">
                 <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
                     <h2 className="text-2xl font-semibold mb-4 text-gray-800">Hello, {user.username}!</h2>
-                    <div className="mb-6 p-4 bg-green-100 rounded-lg">
-                        <p className="text-green-800 mb-2 text-center font-medium">Use this QR code for library access</p>
+                    <div className="mb-6 p-4 bg-gray-100 rounded-lg">
+                        <p className="text-gray-700 mb-2 text-center font-medium">Use this QR code for library access</p>
                         {user.qrCode ? (
                             <img src={user.qrCode} alt="Member QR Code" className="w-64 h-64 border-2 border-white rounded shadow mx-auto" />
                         ) : (

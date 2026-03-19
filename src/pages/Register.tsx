@@ -36,8 +36,8 @@ const Register = () => {
         <div className="min-h-screen bg-white flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-8 w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="w-16 h-16 mx-auto bg-green-50 rounded-2xl flex items-center justify-center mb-4">
-                        <UserPlus className="w-8 h-8 text-green-600" />
+                    <div className="w-16 h-16 mx-auto bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
+                        <UserPlus className="w-8 h-8 text-gray-800" />
                     </div>
                     <h1 className="text-2xl font-bold text-gray-800">Daftar Member</h1>
                     <p className="text-gray-500 mt-1 text-sm">Buat akun untuk meminjam buku</p>
@@ -56,7 +56,7 @@ const Register = () => {
                             type="text"
                             value={nisn}
                             onChange={(e) => setNisn(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
                             placeholder="Masukkan NISN"
                             required
                         />
@@ -67,7 +67,7 @@ const Register = () => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
                             placeholder="Buat password"
                             required
                         />
@@ -78,7 +78,7 @@ const Register = () => {
                             type="password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
                             placeholder="Ulangi password"
                             required
                         />
@@ -86,7 +86,7 @@ const Register = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
+                        className="w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 shadow-sm"
                     >
                         <UserPlus className="w-4 h-4" />
                         {loading ? 'Loading...' : 'Daftar Sekarang'}
@@ -95,7 +95,7 @@ const Register = () => {
 
                 <div className="mt-6 text-center">
                     <span className="text-gray-500 text-sm">Sudah punya akun? </span>
-                    <Link to="/login" className="text-green-600 font-medium text-sm hover:underline">
+                    <Link to="/login" className="text-gray-900 font-medium text-sm hover:underline">
                         Masuk
                     </Link>
                 </div>

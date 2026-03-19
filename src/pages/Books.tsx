@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { useBooks } from '../hooks/useBooks';
 import { useBorrow } from '../hooks/useBorrow';
 import { useCategories } from '../hooks/useCategories';
-import type { Book } from '../types';
+import type { Book, BookFilterParams } from '../types';
 import { BookOpen, X } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
@@ -19,8 +19,8 @@ const Books = () => {
     const [borrowLoading, setBorrowLoading] = useState(false);
 
     useEffect(() => {
-        const params: any = { search };
-        if (categoryId) params.categoryId = categoryId;
+        const params: BookFilterParams = { search };
+        if (categoryId) params.category = categoryId;
         fetchBooks(params);
     }, [search, categoryId, fetchBooks]);
 
@@ -52,13 +52,13 @@ const Books = () => {
                             placeholder="🔍 Cari buku..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent"
                         />
                     </div>
                     <select
                         value={categoryId}
                         onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : '')}
-                        className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white"
+                        className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 bg-white"
                     >
                         <option value="">Semua Kategori</option>
                         {categories.map(cat => (
@@ -91,7 +91,7 @@ const Books = () => {
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                 ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                                    <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-400 flex items-center justify-center">
                                         <span className="text-6xl group-hover:scale-110 transition-transform">📖</span>
                                     </div>
                                 )}
@@ -102,7 +102,7 @@ const Books = () => {
                             <div className="p-5 flex flex-col flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <h3
-                                        className="font-bold text-gray-800 line-clamp-2 text-lg hover:text-blue-600 cursor-pointer"
+                                        className="font-bold text-gray-800 line-clamp-2 text-lg hover:text-gray-600 cursor-pointer"
                                         onClick={() => handleViewDetail(book.id)}
                                     >
                                         {book.title}
@@ -110,7 +110,7 @@ const Books = () => {
                                 </div>
                                 <p className="text-sm text-gray-500 mb-1">✍️ {book.author}</p>
                                 {book.category?.name && (
-                                    <span className="inline-block w-fit px-2 py-0.5 text-xs bg-blue-50 text-blue-600 rounded-full mb-3">
+                                    <span className="inline-block w-fit px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full mb-3">
                                         {book.category.name}
                                     </span>
                                 )}
@@ -126,7 +126,7 @@ const Books = () => {
                                         onClick={() => setBorrowModal(book)}
                                         disabled={book.stock <= 0}
                                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${book.stock > 0
-                                            ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200 shadow-md'
+                                            ? 'bg-gray-900 text-white hover:bg-gray-700 shadow-gray-200 shadow-md'
                                             : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                             }`}
                                     >
@@ -151,7 +151,7 @@ const Books = () => {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-500 flex items-center justify-center">
                                     <span className="text-5xl">📖</span>
                                 </div>
                             )}
@@ -170,8 +170,8 @@ const Books = () => {
                                 <p className="text-sm text-gray-400">oleh {borrowModal.author}</p>
                             </div>
 
-                            <div className="bg-blue-50 rounded-xl p-3 mb-6">
-                                <p className="text-sm text-blue-700 text-center">
+                            <div className="bg-gray-50 rounded-xl p-3 mb-6">
+                                <p className="text-sm text-gray-700 text-center">
                                     📋 Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
                                 </p>
                             </div>
@@ -186,7 +186,7 @@ const Books = () => {
                                 <button
                                     onClick={handleBorrow}
                                     disabled={borrowLoading}
-                                    className="flex-1 py-3 px-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 px-4 text-white bg-gray-900 rounded-xl hover:bg-gray-700 font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                                 >
                                     <BookOpen className="w-4 h-4" />
                                     {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}

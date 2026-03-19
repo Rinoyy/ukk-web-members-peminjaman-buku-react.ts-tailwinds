@@ -1,11 +1,11 @@
 import { API_URL, forceLogout, isUnauthorized } from './api';
-import type { Book } from '../types';
+import type { Book, BookFilterParams } from '../types';
 
 class BookService {
-    async getBooks(params?: { search?: string; category?: string }): Promise<Book[]> {
+    async getBooks(params?: BookFilterParams): Promise<Book[]> {
         const query = new URLSearchParams();
         if (params?.search) query.set('search', params.search);
-        if (params?.category) query.set('category', params.category);
+        if (params?.category) query.set('categoryId', String(params.category));
         const qs = query.toString();
 
         const token = localStorage.getItem('token');

@@ -36,8 +36,8 @@ export const useBorrow = () => {
             await borrowService.borrowBook(bookId);
             fetchBorrowings();
             return true;
-        } catch (err: any) {
-            const message = err.message || 'Gagal meminjam buku';
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Gagal meminjam buku';
             alert(message);
             return false;
         }
@@ -48,8 +48,8 @@ export const useBorrow = () => {
             await borrowService.cancelBorrow(borrowingId);
             fetchBorrowings();
             return true;
-        } catch (err: any) {
-            const message = err.message || 'Gagal membatalkan peminjaman';
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Gagal membatalkan peminjaman';
             alert(message);
             return false;
         }

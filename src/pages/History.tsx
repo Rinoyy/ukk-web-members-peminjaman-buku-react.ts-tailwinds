@@ -97,7 +97,7 @@ const History = () => {
 
             {loading ? (
                 <div className="text-center py-20">
-                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-gray-800 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-500">Memuat riwayat...</p>
                 </div>
             ) : borrowings.length === 0 ? (
@@ -141,7 +141,7 @@ const History = () => {
                                             {b.status === 'BORROWED' && b.dueDate && (
                                                 <>
                                                     <p className="text-gray-400 text-xs mb-1">Jatuh Tempo</p>
-                                                    <p className={`font-medium ${new Date() > new Date(b.dueDate) ? 'text-red-600' : 'text-blue-600'}`}>
+                                                    <p className={`font-medium ${new Date() > new Date(b.dueDate) ? 'text-red-600' : 'text-gray-700'}`}>
                                                         {new Date(b.dueDate).toLocaleDateString('id-ID', {
                                                             day: 'numeric', month: 'long', year: 'numeric'
                                                         })}

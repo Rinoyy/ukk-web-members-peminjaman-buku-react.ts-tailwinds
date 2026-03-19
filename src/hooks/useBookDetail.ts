@@ -37,8 +37,8 @@ export const useBookDetail = () => {
         try {
             await borrowService.borrowBook(bookId);
             return { success: true };
-        } catch (err: any) {
-            return { success: false, error: err.message || 'Gagal meminjam buku' };
+        } catch (err: unknown) {
+            return { success: false, error: err instanceof Error ? err.message : 'Gagal meminjam buku' };
         } finally {
             setBorrowLoading(false);
         }

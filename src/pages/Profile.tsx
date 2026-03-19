@@ -6,11 +6,11 @@ const Profile = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+        <div className="min-h-screen bg-white flex items-center justify-center p-6">
             <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 p-8 max-w-md w-full">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="w-24 h-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center text-5xl mb-4">
+                    <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-5xl mb-4">
                         👤
                     </div>
                     <h1 className="text-2xl font-bold text-gray-800 mb-1">{user.name ?? user.username}</h1>
