@@ -34,7 +34,7 @@ const Profile = () => {
                         />
                     ) : (
                         <div className="w-64 h-64 mx-auto bg-gray-100 rounded-xl flex items-center justify-center text-gray-400">
-                            QR Not Available
+                            QR Tidak Tersedia
                         </div>
                     )}
                     <p className="text-center text-gray-400 text-xs mt-4">

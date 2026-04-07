@@ -72,7 +72,7 @@ const Books = () => {
 
             {/* Book Grid */}
             {loading ? (
-                <div className="text-center py-12 text-gray-500">Loading...</div>
+                <div className="text-center py-12 text-gray-500">Memuat...</div>
             ) : books.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                     <Inbox className="w-12 h-12 mx-auto mb-2 text-gray-300" />
@@ -121,7 +121,7 @@ const Books = () => {
                                     <div className="flex flex-col">
                                         <span className="text-xs text-gray-400 uppercase font-semibold">Stok</span>
                                         <span className={`text-sm font-bold ${book.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                            {book.stock} Available
+                                            {book.stock} Tersedia
                                         </span>
                                     </div>
                                     <button
@@ -191,7 +191,7 @@ const Books = () => {
                                     className="flex-1 py-3 px-4 text-white bg-gray-900 rounded-xl hover:bg-gray-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     <BookOpen className="w-4 h-4" />
-                                    {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}
+                                    {borrowLoading ? 'Memuat...' : 'Ya, Pinjam'}
                                 </button>
                             </div>
                         </div>

@@ -89,7 +89,7 @@ const Register = () => {
                         className="w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-700 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
                     >
                         <UserPlus className="w-4 h-4" />
-                        {loading ? 'Loading...' : 'Daftar Sekarang'}
+                        {loading ? 'Memuat...' : 'Daftar Sekarang'}
                     </button>
                 </form>
 

@@ -241,7 +241,7 @@ const BookDetail = () => {
                                     className="flex-1 py-3 px-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     <BookOpen className="w-4 h-4" />
-                                    {borrowLoading ? 'Loading...' : 'Ya, Pinjam'}
+                                    {borrowLoading ? 'Memuat...' : 'Ya, Pinjam'}
                                 </button>
                             </div>
                         </div>

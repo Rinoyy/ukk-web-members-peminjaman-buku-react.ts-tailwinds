@@ -10,25 +10,25 @@ const SiswaHistory = () => {
     }, [fetchBorrowings]);
 
     const handleReturn = async (borrowingId: number) => {
-        if (confirm('Return this book?')) {
+        if (confirm('Kembalikan buku ini?')) {
             await requestReturn(borrowingId);
         }
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>Memuat...</p>;
 
     return (
         <div className="p-6 bg-white rounded-lg shadow">
-            <h2 className="mb-4 text-xl font-bold">My Borrowing History</h2>
+            <h2 className="mb-4 text-xl font-bold">Riwayat Peminjaman Saya</h2>
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="p-3 border-b">Book</th>
-                            <th className="p-3 border-b">Author</th>
+                            <th className="p-3 border-b">Buku</th>
+                            <th className="p-3 border-b">Penulis</th>
                             <th className="p-3 border-b">Status</th>
-                            <th className="p-3 border-b">Date</th>
-                            <th className="p-3 border-b">Action</th>
+                            <th className="p-3 border-b">Tanggal</th>
+                            <th className="p-3 border-b">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +49,13 @@ const SiswaHistory = () => {
                                                             : 'bg-red-100 text-red-800'
                                             }`}
                                     >
-                                        {b.status.replace('_', ' ')}
+                                        {b.status === 'PENDING' ? 'MENUNGGU'
+                                            : b.status === 'BORROWED' ? 'DIPINJAM'
+                                            : b.status === 'RETURN_PENDING' ? 'MENUNGGU KEMBALI'
+                                            : b.status === 'RETURNED' ? 'DIKEMBALIKAN'
+                                            : b.status === 'REJECTED' ? 'DITOLAK'
+                                            : b.status === 'CANCELLED' ? 'DIBATALKAN'
+                                            : b.status}
                                     </span>
                                 </td>
                                 <td className="p-3 border-b">
