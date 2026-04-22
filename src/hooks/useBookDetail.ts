@@ -32,10 +32,10 @@ export const useBookDetail = () => {
         }
     }, []);
 
-    const borrowBook = async (bookId: number): Promise<{ success: boolean; error?: string }> => {
+    const borrowBook = async (bookId: number, dueDate: string): Promise<{ success: boolean; error?: string }> => {
         setBorrowLoading(true);
         try {
-            await borrowService.borrowBook(bookId);
+            await borrowService.borrowBook(bookId, dueDate);
             return { success: true };
         } catch (err: unknown) {
             return { success: false, error: err instanceof Error ? err.message : 'Gagal meminjam buku' };

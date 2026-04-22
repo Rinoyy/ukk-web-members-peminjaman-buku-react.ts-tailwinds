@@ -14,7 +14,7 @@ const Home = () => {
     return (
         <div>
             {/* Welcome Banner */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white mb-6 shadow-lg">
+            <div className="bg-blue-500 rounded-2xl p-6 text-white mb-6 shadow-lg">
                 <h2 className="text-2xl font-bold mb-2">Selamat Datang, {user?.username}!</h2>
                 <p className="opacity-90">Jelajahi koleksi buku dan mulai pinjam hari ini.</p>
             </div>

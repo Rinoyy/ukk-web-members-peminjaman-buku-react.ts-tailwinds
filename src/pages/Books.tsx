@@ -1,43 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useBooks } from '../hooks/useBooks';
-import { useBorrow } from '../hooks/useBorrow';
 import { useCategories } from '../hooks/useCategories';
 import type { Book, BookFilterParams } from '../types';
-import { BookOpen, BookMarked, X, Search, Inbox, PenLine } from 'lucide-react';
+import { BookOpen, BookMarked, Search, Inbox, PenLine } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
 
 const Books = () => {
     const { books, loading, fetchBooks } = useBooks();
-    const { requestBorrow } = useBorrow();
     const { categories } = useCategories();
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [categoryId, setCategoryId] = useState<number | ''>('');
-    const [borrowModal, setBorrowModal] = useState<Book | null>(null);
-    const [borrowLoading, setBorrowLoading] = useState(false);
 
     useEffect(() => {
         const params: BookFilterParams = { search };
         if (categoryId) params.category = categoryId;
         fetchBooks(params);
     }, [search, categoryId, fetchBooks]);
-
-    const handleBorrow = async () => {
-        if (!borrowModal) return;
-        setBorrowLoading(true);
-        const success = await requestBorrow(borrowModal.id);
-        setBorrowLoading(false);
-        if (success) {
-            setBorrowModal(null);
-            alert('Permintaan peminjaman berhasil dikirim!');
-        }
-    };
-
-    const handleViewDetail = (bookId: number) => {
-        navigate(`/books/${bookId}`);
-    };
 
     return (
         <div>
@@ -84,7 +65,7 @@ const Books = () => {
                         <div key={book.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
                             <div
                                 className="h-48 relative cursor-pointer group overflow-hidden"
-                                onClick={() => handleViewDetail(book.id)}
+                                onClick={() => navigate(`/books/${book.id}`)}
                             >
                                 {book.image ? (
                                     <img
@@ -105,7 +86,7 @@ const Books = () => {
                                 <div className="flex items-start justify-between mb-2">
                                     <h3
                                         className="font-bold text-gray-800 line-clamp-2 text-lg hover:text-gray-600 cursor-pointer"
-                                        onClick={() => handleViewDetail(book.id)}
+                                        onClick={() => navigate(`/books/${book.id}`)}
                                     >
                                         {book.title}
                                     </h3>
@@ -125,77 +106,15 @@ const Books = () => {
                                         </span>
                                     </div>
                                     <button
-                                        onClick={() => setBorrowModal(book)}
-                                        disabled={book.stock <= 0}
-                                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${book.stock > 0
-                                            ? 'bg-gray-900 text-white hover:bg-gray-700 shadow-gray-200 shadow-md cursor-pointer'
-                                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                            }`}
+                                        onClick={() => navigate(`/books/${book.id}`)}
+                                        className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-900 text-white hover:bg-gray-700 shadow-gray-200 shadow-md cursor-pointer transition-colors"
                                     >
-                                        Pinjam Buku
+                                        Detail
                                     </button>
                                 </div>
                             </div>
                         </div>
                     ))}
-                </div>
-            )}
-
-            {/* Borrow Confirmation Modal */}
-            {borrowModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                    <div className="w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl overflow-hidden">
-                        <div className="h-32 relative overflow-hidden">
-                            {borrowModal.image ? (
-                                <img
-                                    src={`${API_BASE}${borrowModal.image}`}
-                                    alt={borrowModal.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-500 flex items-center justify-center">
-                                    <BookOpen className="w-14 h-14 text-white/70" />
-                                </div>
-                            )}
-                            <button
-                                onClick={() => setBorrowModal(null)}
-                                className="absolute top-3 right-3 w-8 h-8 bg-black/40 rounded-full flex items-center justify-center hover:bg-black/60 cursor-pointer transition-colors"
-                            >
-                                <X className="w-4 h-4 text-white" />
-                            </button>
-                        </div>
-
-                        <div className="p-6">
-                            <div className="text-center mb-6">
-                                <h3 className="text-lg font-bold text-gray-900 mb-1">Pinjam Buku Ini?</h3>
-                                <p className="text-gray-600 font-medium">{borrowModal.title}</p>
-                                <p className="text-sm text-gray-400">oleh {borrowModal.author}</p>
-                            </div>
-
-                            <div className="bg-gray-50 rounded-xl p-3 mb-6">
-                                <p className="text-sm text-gray-700 text-center">
-                                    Permintaan peminjaman akan dikirim ke petugas untuk disetujui.
-                                </p>
-                            </div>
-
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={() => setBorrowModal(null)}
-                                    className="flex-1 py-3 px-4 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 cursor-pointer font-medium transition-colors"
-                                >
-                                    Batal
-                                </button>
-                                <button
-                                    onClick={handleBorrow}
-                                    disabled={borrowLoading}
-                                    className="flex-1 py-3 px-4 text-white bg-gray-900 rounded-xl hover:bg-gray-700 cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                >
-                                    <BookOpen className="w-4 h-4" />
-                                    {borrowLoading ? 'Memuat...' : 'Ya, Pinjam'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             )}
         </div>

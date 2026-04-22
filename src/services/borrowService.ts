@@ -68,7 +68,7 @@ class BorrowService {
         return response.json();
     }
 
-    async borrowBook(bookId: number): Promise<Borrowing> {
+    async borrowBook(bookId: number, dueDate: string): Promise<Borrowing> {
         if (!bookId || bookId <= 0) {
             throw new Error('ID buku tidak valid');
         }
@@ -80,7 +80,7 @@ class BorrowService {
                 'Content-Type': 'application/json',
                 ...(token && { Authorization: `Bearer ${token}` }),
             },
-            body: JSON.stringify({ bookId }),
+            body: JSON.stringify({ bookId, dueDate }),
         });
         if (isUnauthorized(response.status)) {
             forceLogout();

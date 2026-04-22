@@ -8,6 +8,7 @@ const Register   = lazy(() => import('../pages/Register'));
 const Home       = lazy(() => import('../pages/Home'));
 const Books      = lazy(() => import('../pages/Books'));
 const BookDetail = lazy(() => import('../pages/BookDetail'));
+const BorrowForm = lazy(() => import('../pages/BorrowForm'));
 const History    = lazy(() => import('../pages/History'));
 const Profile    = lazy(() => import('../pages/Profile'));
 
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: '/books/:id',
                 element: <Suspense fallback={<PageLoader />}><BookDetail /></Suspense>,
+            },
+            {
+                path: '/books/:id/borrow',
+                element: <Suspense fallback={<PageLoader />}><BorrowForm /></Suspense>,
             },
             {
                 path: '/history',

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import NotificationBell from './NotificationBell';
-import { Home, BookMarked, ClipboardList, User, BookOpen, type LucideIcon } from 'lucide-react';
+import { Home, BookMarked, ClipboardList, User, type LucideIcon } from 'lucide-react';
 
 interface LayoutProps {
     children: ReactNode;
@@ -25,7 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
             <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 text-gray-800 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <BookOpen className="w-6 h-6 text-blue-600" />
+                        <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
                         <h1 className="text-xl font-bold">Perpustakaan</h1>
                     </div>
                     <div className="flex items-center gap-3">
