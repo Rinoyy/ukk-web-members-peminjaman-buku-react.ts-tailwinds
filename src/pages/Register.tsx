@@ -22,13 +22,13 @@ const Register = () => {
         }
 
         setLoading(true);
-        const success = await register(nisn, password);
-        setLoading(false);
-
-        if (success) {
+        try {
+            await register(nisn, password);
             navigate('/login');
-        } else {
-            setError('Registrasi gagal. NISN tidak terdaftar atau sudah digunakan.');
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Registrasi gagal.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -51,13 +51,13 @@ const Register = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN / NIP</label>
                         <input
                             type="text"
                             value={nisn}
                             onChange={(e) => setNisn(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
-                            placeholder="Masukkan NISN"
+                            placeholder="Masukkan NISN atau NIP"
                             required
                         />
                     </div>

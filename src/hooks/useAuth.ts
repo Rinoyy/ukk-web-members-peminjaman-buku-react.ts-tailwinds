@@ -42,13 +42,7 @@ export const useAuth = () => {
     };
 
     const register = async (nisn: string, password: string) => {
-        try {
-            await authService.register(nisn, password);
-            return true;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
+        await authService.register(nisn, password);
     };
 
     const logout = () => {
