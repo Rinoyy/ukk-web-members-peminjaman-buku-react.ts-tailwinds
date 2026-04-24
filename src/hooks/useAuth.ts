@@ -26,8 +26,8 @@ export const useAuth = () => {
     const login = async (nisn: string, password: string) => {
         try {
             const data = await authService.login({ nisn, password });
-            if (data.user.role !== 'SISWA') {
-                alert('Akses ditolak: Halaman ini hanya untuk siswa.');
+            if (!['SISWA', 'GURU', 'STAFF'].includes(data.user.role)) {
+                alert('Akses ditolak: Halaman ini tidak tersedia untuk akun ini.');
                 return false;
             }
             localStorage.setItem('token', data.token);

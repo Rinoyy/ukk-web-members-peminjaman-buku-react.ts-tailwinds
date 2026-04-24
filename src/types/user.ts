@@ -3,7 +3,7 @@ export interface User {
     username: string;
     nisn?: string;
     name?: string;
-    role: 'ADMIN' | 'SISWA';
+    role: 'ADMIN' | 'SISWA' | 'GURU' | 'STAFF';
     qrCode?: string;
     createdAt: string;
 }

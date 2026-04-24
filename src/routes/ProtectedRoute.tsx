@@ -16,7 +16,8 @@ export const ProtectedRoute = () => {
         );
     }
 
-    if (!user || user.role !== 'SISWA') {
+    const allowed = ['SISWA', 'GURU', 'STAFF'];
+    if (!user || !allowed.includes(user.role)) {
         return <Navigate to="/login" replace />;
     }
 
@@ -30,8 +31,9 @@ export const ProtectedRoute = () => {
 export const ProfileRoute = () => {
     const { user, loading } = useAuth();
 
+    const allowed = ['SISWA', 'GURU', 'STAFF'];
     if (loading) return <div className="flex items-center justify-center h-screen">Memuat...</div>;
-    if (!user || user.role !== 'SISWA') return <Navigate to="/login" replace />;
+    if (!user || !allowed.includes(user.role)) return <Navigate to="/login" replace />;
 
     return <Outlet />;
 };

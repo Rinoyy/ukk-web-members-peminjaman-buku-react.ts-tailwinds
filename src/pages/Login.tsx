@@ -43,13 +43,13 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN / Username</label>
                         <input
                             type="text"
                             value={nisn}
                             onChange={(e) => setNisn(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
-                            placeholder="Masukkan NISN"
+                            placeholder="NISN (siswa) atau username (guru/staff)"
                             required
                         />
                     </div>

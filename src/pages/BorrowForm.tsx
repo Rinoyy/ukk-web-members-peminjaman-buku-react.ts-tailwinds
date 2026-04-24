@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { useBookDetail } from '../hooks/useBookDetail';
-import { BookOpen, ChevronLeft, Calendar, AlertTriangle, PenLine } from 'lucide-react';
+import { BookOpen, ChevronLeft, Calendar, AlertTriangle, PenLine, X } from 'lucide-react';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -12,7 +12,7 @@ const getTomorrowDate = () => {
     return d.toISOString().slice(0, 10);
 };
 
-const getDefaultReturnDate = () => {
+const getMaxReturnDate = () => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
     return d.toISOString().slice(0, 10);
@@ -23,7 +23,8 @@ const BorrowForm = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { book, eligibility, loading, error, borrowLoading, fetchBook, fetchEligibility, borrowBook } = useBookDetail();
-    const [returnDate, setReturnDate] = useState(getDefaultReturnDate());
+    const [returnDate, setReturnDate] = useState('');
+    const [showRulesModal, setShowRulesModal] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -31,10 +32,15 @@ const BorrowForm = () => {
         if (user) fetchEligibility();
     }, [id, user, fetchBook, fetchEligibility]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!book || !returnDate) return;
+        setShowRulesModal(true);
+    };
 
+    const handleConfirmBorrow = async () => {
+        if (!book || !returnDate) return;
+        setShowRulesModal(false);
         const result = await borrowBook(book.id, returnDate);
         if (result.success) {
             alert('Permintaan peminjaman berhasil dikirim! Silakan ambil buku di perpustakaan.');
@@ -63,6 +69,7 @@ const BorrowForm = () => {
     const cannotBorrow = eligibility !== null && !eligibility.canBorrow;
 
     return (
+        <>
         <div className="max-w-lg mx-auto">
             <button
                 onClick={() => navigate(`/books/${id}`)}
@@ -117,18 +124,13 @@ const BorrowForm = () => {
                                     type="date"
                                     value={returnDate}
                                     min={getTomorrowDate()}
+                                    max={getMaxReturnDate()}
                                     onChange={(e) => setReturnDate(e.target.value)}
                                     required
                                     className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm"
                                 />
                                 <p className="text-xs text-gray-400 mt-1">
-                                    Pilih tanggal kapan buku akan dikembalikan. Petugas dapat menyesuaikan saat menyetujui.
-                                </p>
-                            </div>
-
-                            <div className="bg-blue-50 rounded-xl p-3">
-                                <p className="text-sm text-blue-700 text-center">
-                                    Permintaan akan dikirim ke petugas untuk disetujui.
+                                    Maksimal peminjaman <span className="font-medium text-gray-600">7 hari</span>.
                                 </p>
                             </div>
 
@@ -154,6 +156,53 @@ const BorrowForm = () => {
                 </div>
             </div>
         </div>
+
+            {showRulesModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-bold text-gray-900">Konfirmasi Peminjaman</h3>
+                            <button onClick={() => setShowRulesModal(false)} className="text-gray-400 hover:text-gray-600 cursor-pointer">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <ul className="space-y-3 text-sm text-gray-700">
+                            <li className="flex items-start gap-2">
+                                <span className="mt-0.5 w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                                <span>Maksimal durasi peminjaman adalah <strong>7 hari</strong>.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="mt-0.5 w-5 h-5 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                                <span>Lewat dari jatuh tempo dikenakan denda <strong>Rp 1.000 per hari</strong>.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="mt-0.5 w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                                <span>Buku <strong>rusak atau hilang</strong> dikenakan denda sesuai harga buku.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="mt-0.5 w-5 h-5 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center text-xs font-bold shrink-0">4</span>
+                                <span>Hanya diperbolehkan <strong>1 peminjaman aktif</strong> dalam satu waktu.</span>
+                            </li>
+                        </ul>
+                        <div className="flex gap-2 mt-5">
+                            <button
+                                onClick={() => setShowRulesModal(false)}
+                                className="flex-1 py-2.5 text-gray-600 bg-gray-100 rounded-xl font-medium hover:bg-gray-200 cursor-pointer transition-colors"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={handleConfirmBorrow}
+                                disabled={borrowLoading}
+                                className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 cursor-pointer transition-colors disabled:opacity-50"
+                            >
+                                {borrowLoading ? 'Memproses...' : 'Mengerti & Pinjam'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 
