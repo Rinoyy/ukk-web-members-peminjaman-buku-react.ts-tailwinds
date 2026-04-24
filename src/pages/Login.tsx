@@ -20,7 +20,7 @@ const Login = () => {
         setLoading(false);
 
         if (!success) {
-            setError('Login gagal. Periksa NISN dan password.');
+            setError('Login gagal. Periksa NISN/NIP dan password.');
         }
     };
 
@@ -43,13 +43,13 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN / Username</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">NISN / NIP</label>
                         <input
                             type="text"
                             value={nisn}
                             onChange={(e) => setNisn(e.target.value)}
                             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-shadow"
-                            placeholder="NISN (siswa) atau username (guru/staff)"
+                            placeholder="NISN (siswa) atau NIP (guru/staff)"
                             required
                         />
                     </div>

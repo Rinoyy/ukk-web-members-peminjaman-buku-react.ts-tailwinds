@@ -4,7 +4,7 @@ import type { LoginResponse, User } from '../types';
 class AuthService {
     async login(credentials: { nisn: string; password: string }): Promise<LoginResponse> {
         if (!credentials.nisn || !credentials.nisn.trim()) {
-            throw new Error('NISN wajib diisi');
+            throw new Error('NISN/NIP wajib diisi');
         }
         if (!credentials.password || !credentials.password.trim()) {
             throw new Error('Password wajib diisi');
